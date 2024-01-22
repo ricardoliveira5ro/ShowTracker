@@ -12,7 +12,8 @@ import androidx.core.view.WindowCompat
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
-    tertiary = Pink40
+    tertiary = Pink40,
+    background = DarkBlueBackground
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -36,7 +37,8 @@ fun ShowTrackerTheme(
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.background.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
+            window.navigationBarColor = colorScheme.background.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }
     }
 
