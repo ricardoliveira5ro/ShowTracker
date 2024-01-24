@@ -22,36 +22,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.showtracker.R
+import com.example.showtracker.fonts.Typography.nexaFont
+import com.example.showtracker.fonts.Typography.robotoFont
+import com.example.showtracker.fonts.Typography.openSans
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
 fun Home() {
-    val robotoFont = FontFamily(
-        Font(R.font.roboto_regular, FontWeight.Normal),
-        Font(R.font.roboto_light, FontWeight.Light),
-        Font(R.font.roboto_medium, FontWeight.Medium),
-        Font(R.font.roboto_bold, FontWeight.Bold),
-        Font(R.font.roboto_black, FontWeight.Black)
-    )
-
-    val nexaFont = FontFamily(
-        Font(R.font.nexa_extralight, FontWeight.ExtraLight),
-        Font(R.font.nexa_heavy, FontWeight.Normal)
-    )
-
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -100,6 +88,15 @@ fun Home() {
                     )
                 }
             }
+        }
+        
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = "Currently watching", color = Color.White, fontFamily = openSans, fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
     }
 }
