@@ -137,19 +137,18 @@ fun Home() {
             Spacer(modifier = Modifier.padding(12.dp))
 
             Text(text = "Recommended for you", modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), color = Color.White, fontFamily = openSans, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-
         }
 
         items(DummyShow.recommended.chunked(2)) {
             recommended ->
                 LazyRow(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     items(recommended) { recommended ->
                         ElevatedCard(
                             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-                            modifier = Modifier.size(160.dp, 260.dp)
+                            modifier = Modifier.size(155.dp, 260.dp)
                         ) {
                             Image(
                                 painter = painterResource(id = recommended.imageResourceId),
