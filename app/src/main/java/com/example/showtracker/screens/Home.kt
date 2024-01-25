@@ -9,9 +9,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -24,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -36,6 +42,7 @@ import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography.nexaFont
 import com.example.showtracker.fonts.Typography.robotoFont
 import com.example.showtracker.fonts.Typography.openSans
+import com.example.showtracker.model.DummyShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
@@ -97,6 +104,30 @@ fun Home() {
             horizontalArrangement = Arrangement.Start
         ) {
             Text(text = "Currently watching", color = Color.White, fontFamily = openSans, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        }
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            LazyRow {
+                items (DummyShow.shows) {
+                    show ->
+                        ElevatedCard (
+                            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                            modifier = Modifier
+                                .size(width = 240.dp, height = 130.dp)
+                                .padding(end = 12.dp)
+                        ) {
+                            Box(
+                                Modifier.fillMaxSize()
+                            ) {
+                                Image(painter = painterResource(id = show.imageResourceId), contentDescription = show.title, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                                Text(text = show.title, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).align(Alignment.BottomStart), color = Color.White, fontFamily = openSans, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                            }
+                        }
+                }
+            }
         }
     }
 }
