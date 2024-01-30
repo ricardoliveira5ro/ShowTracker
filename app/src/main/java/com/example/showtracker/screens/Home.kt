@@ -92,7 +92,7 @@ fun Home() {
                                 }
                                 innerTextField()
                             },
-                            cursorBrush = SolidColor(colorResource(id = R.color.blue_background))
+                            cursorBrush = SolidColor(colorResource(id = R.color.pink))
                         )
                     }
                 }
