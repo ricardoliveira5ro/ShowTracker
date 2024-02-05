@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.showtracker.screens.Home
+import com.example.showtracker.screens.Watchlist
 
 @Composable
 fun Navigation(navController: NavController, viewModel: MainViewModel, pd: PaddingValues) {
@@ -18,7 +19,7 @@ fun Navigation(navController: NavController, viewModel: MainViewModel, pd: Paddi
             Home()
         }
         composable(Screen.WatchList.route) {
-
+            Watchlist()
         }
     }
 }

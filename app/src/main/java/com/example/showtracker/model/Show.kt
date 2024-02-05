@@ -21,4 +21,13 @@ object DummyShow {
         Show(title = "Bojack Horseman", imageResourceId = R.drawable.bojack_horseman),
         Show(title = "The Blacklist", imageResourceId = R.drawable.blacklist)
     )
+
+    val watchlistEmpty = listOf<Show>()
+
+    val watchlist = listOf(
+        Show(title = "Mr Robot", imageResourceId = R.drawable.mr_robot),
+        Show(title = "Breaking Bad", imageResourceId = R.drawable.breaking_bad),
+        Show(title = "Bojack Horseman", imageResourceId = R.drawable.bojack_horseman),
+        Show(title = "The Blacklist", imageResourceId = R.drawable.blacklist)
+    )
 }
