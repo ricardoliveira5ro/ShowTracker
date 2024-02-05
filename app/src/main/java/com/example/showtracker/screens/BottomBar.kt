@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -20,7 +21,7 @@ import com.example.showtracker.screens
 
 @Composable
 fun BottomBar(currentRoute: String?, controller: NavController) {
-    BottomNavigation(
+    BottomAppBar(
         modifier = Modifier.wrapContentSize().clip(RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp)),
         backgroundColor = colorResource(id = R.color.blue_bottom_menu),
         contentColor = Color.White
