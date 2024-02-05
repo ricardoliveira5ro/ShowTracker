@@ -71,7 +71,7 @@ fun Home() {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(8.dp))
                         .background(colorResource(id = R.color.blue_boxes))
                 ) {
                     Row (
