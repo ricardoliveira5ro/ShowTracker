@@ -1,5 +1,7 @@
 package com.example.showtracker.screens
 
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.graphics.Path
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -27,12 +29,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -40,6 +45,8 @@ import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.DummyShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
+import kotlin.math.ceil
+import kotlin.math.floor
 
 @Composable
 fun Watchlist() {
@@ -116,11 +123,14 @@ fun Watchlist() {
                                                 .padding(0.dp, 6.dp, 16.dp, 6.dp),
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
-                                            RatingBar(rating = show.rating)
+                                            //RatingBar(rating = show.rating)
+                                            FractionalRatingBar(rating = show.rating)
                                             Row(
                                                 verticalAlignment = Alignment.CenterVertically
                                             ) {
-                                                Image(painter = painterResource(id = R.drawable.timer), contentDescription = "Time", modifier = Modifier.size(width = 18.dp, height = 18.dp).padding(end = 4.dp))
+                                                Image(painter = painterResource(id = R.drawable.timer), contentDescription = "Time", modifier = Modifier
+                                                    .size(width = 18.dp, height = 18.dp)
+                                                    .padding(end = 4.dp))
                                                 Text(text = "${show.time}m", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
                                             }
                                         }
@@ -135,30 +145,87 @@ fun Watchlist() {
 }
 
 @Composable
-fun RatingBar(maxStars: Int = 5, rating: Float) {
+fun FractionalRatingBar(
+    rating: Float,
+    maxRating: Int = 5,
+    filledColor: Color = colorResource(id = R.color.pink),
+    emptyColor: Color = Color(0x20FFFFFF)
+) {
     val density = LocalDensity.current.density
+    val starSize = (6f * density).dp
 
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = Arrangement.Start,
     ) {
-        for (i in 1..maxStars) {
-            val isSelected = i <= rating
-            Icon(
-                imageVector = if (isSelected) Icons.Filled.Star
-                                else Icons.Default.Star,
-                contentDescription = null,
-                tint = if (isSelected) colorResource(id = R.color.pink)
-                        else Color(0x20FFFFFF),
-                modifier = Modifier
-                    .width((6f * density).dp)
-                    .height((6f * density).dp)
-            )
+        val fullStars = floor(rating).toInt()
+        val partialStarFill = rating - fullStars
+        val emptyStars = maxRating - ceil(rating).toInt()
 
-            if (i < maxStars) {
-                Spacer(modifier = Modifier.width((0.5f * density).dp))
+        repeat(fullStars) {
+            Icon(Icons.Filled.Star, contentDescription = null, tint = filledColor, modifier = Modifier.size(starSize))
+        }
+
+        if (partialStarFill > 0) {
+            PartialStar(
+                starSize = starSize - 3.dp,
+                filledColor = filledColor,
+                emptyColor = emptyColor,
+                fillPercentage = partialStarFill
+            )
+        }
+
+        repeat(emptyStars) {
+            Icon(Icons.Filled.Star, contentDescription = null, tint = emptyColor, modifier = Modifier.size(starSize))
+        }
+    }
+}
+
+@Composable
+private fun PartialStar(
+    starSize: Dp,
+    filledColor: Color,
+    emptyColor: Color,
+    fillPercentage: Float
+) {
+    Canvas(modifier = Modifier.size(starSize)) {
+        val starPath = createStarPath(size.width, size.height)
+
+        translate(0f, 1.dp.toPx()) {
+            clipRect(
+                left = 0f,
+                top = 0f,
+                right = size.width * fillPercentage,
+                bottom = size.height
+            ) {
+                drawPath(starPath, color = filledColor)
+            }
+            clipRect(
+                left = size.width * fillPercentage,
+                top = 0f,
+                right = size.width,
+                bottom = size.height
+            ) {
+                drawPath(starPath, color = emptyColor)
             }
         }
     }
+}
+
+
+private fun createStarPath(width: Float, height: Float): Path {
+    val path = Path()
+    path.moveTo(0.5f * width, 0.0f * height)
+    path.lineTo(0.628f * width, 0.377f * height)
+    path.lineTo(1.0f * width, 0.377f * height)
+    path.lineTo(0.688f * width, 0.613f * height)
+    path.lineTo(0.809f * width, 1.0f * height)
+    path.lineTo(0.5f * width, 0.753f * height)
+    path.lineTo(0.191f * width, 1.0f * height)
+    path.lineTo(0.312f * width, 0.613f * height)
+    path.lineTo(0.0f * width, 0.377f * height)
+    path.lineTo(0.372f * width, 0.377f * height)
+    path.close()
+    return path
 }
 
 @Preview(showBackground = true)
