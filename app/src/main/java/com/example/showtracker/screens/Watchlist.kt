@@ -2,14 +2,16 @@ package com.example.showtracker.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,7 +43,7 @@ fun Watchlist() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(24.dp),
     )
     {
         Row(
@@ -67,45 +69,50 @@ fun Watchlist() {
         ) {
             items(DummyShow.watchlist) {
                 show ->
-                    Row(
-                        modifier = Modifier.padding(bottom = 8.dp),
-                        verticalAlignment = Alignment.Bottom
+
+                    BoxWithConstraints(
+                        modifier = Modifier.padding(vertical = 12.dp)
                     ) {
+
+                        val boxWidth = this.maxWidth
                         Card(
-                            modifier = Modifier
-                                .size(width = 100.dp, height = 140.dp)
-                                .padding(8.dp)
-                                .zIndex(1f)
+                            modifier = Modifier.size(width = boxWidth / 3.5f, height = 140.dp).zIndex(2f),
+                            shape = RoundedCornerShape(6.dp)
                         ) {
                             Image(painter = painterResource(id = show.imageResourceId), contentDescription = show.title, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
                         }
-                        Card(
-                            modifier = Modifier
-                                .size(width = 300.dp, height = 100.dp)
-                                .offset(x = (-60).dp),
-                            shape = RoundedCornerShape(8.dp),
-                            colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.blue_boxes))
-                        ) {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 12.dp)
+                        Column() {
+                            Spacer(modifier = Modifier
+                                .height(20.dp)
+                                .width(10.dp))
+                            Row( ) {
+                                Spacer(modifier = Modifier.width(20.dp))
+                                Card(
+                                    modifier = Modifier.size(width = boxWidth, height = 130.dp),
+                                    shape = RoundedCornerShape(6.dp),
+                                    colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.blue_boxes))
                                 ) {
-                                    Text(text = show.title, color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Medium, fontSize = 18.sp)
-                                }
+                                    Column(
+                                        modifier = Modifier.fillMaxSize().padding(start = 95.dp),
+                                        verticalArrangement = Arrangement.Center
+                                    ) {
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                        ) {
+                                            Text(text = show.title, color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Medium, fontSize = 18.sp)
+                                        }
 
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 12.dp, vertical = 6.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween
-                                ) {
-                                    Text(text = "3 estrelas", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
-                                    Text(text = "120m", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(0.dp, 6.dp, 16.dp, 6.dp),
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            Text(text = "3 estrelas", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
+                                            Text(text = "120m", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
+                                        }
+                                    }
                                 }
                             }
                         }
