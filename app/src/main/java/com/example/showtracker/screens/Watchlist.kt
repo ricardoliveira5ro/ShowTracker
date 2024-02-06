@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -26,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -76,7 +79,9 @@ fun Watchlist() {
 
                         val boxWidth = this.maxWidth
                         Card(
-                            modifier = Modifier.size(width = boxWidth / 3.5f, height = 140.dp).zIndex(2f),
+                            modifier = Modifier
+                                .size(width = boxWidth / 3.5f, height = 140.dp)
+                                .zIndex(2f),
                             shape = RoundedCornerShape(6.dp)
                         ) {
                             Image(painter = painterResource(id = show.imageResourceId), contentDescription = show.title, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
@@ -93,7 +98,9 @@ fun Watchlist() {
                                     colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.blue_boxes))
                                 ) {
                                     Column(
-                                        modifier = Modifier.fillMaxSize().padding(start = 95.dp),
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(start = 95.dp),
                                         verticalArrangement = Arrangement.Center
                                     ) {
                                         Row(
@@ -109,14 +116,46 @@ fun Watchlist() {
                                                 .padding(0.dp, 6.dp, 16.dp, 6.dp),
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
-                                            Text(text = "3 estrelas", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
-                                            Text(text = "120m", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
+                                            RatingBar(rating = show.rating)
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Image(painter = painterResource(id = R.drawable.timer), contentDescription = "Time", modifier = Modifier.size(width = 18.dp, height = 18.dp).padding(end = 4.dp))
+                                                Text(text = "${show.time}m", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }
+            }
+        }
+    }
+}
+
+@Composable
+fun RatingBar(maxStars: Int = 5, rating: Float) {
+    val density = LocalDensity.current.density
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        for (i in 1..maxStars) {
+            val isSelected = i <= rating
+            Icon(
+                imageVector = if (isSelected) Icons.Filled.Star
+                                else Icons.Default.Star,
+                contentDescription = null,
+                tint = if (isSelected) colorResource(id = R.color.pink)
+                        else Color(0x20FFFFFF),
+                modifier = Modifier
+                    .width((6f * density).dp)
+                    .height((6f * density).dp)
+            )
+
+            if (i < maxStars) {
+                Spacer(modifier = Modifier.width((0.5f * density).dp))
             }
         }
     }
