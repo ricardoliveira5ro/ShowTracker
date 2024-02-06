@@ -117,7 +117,12 @@ fun Watchlist() {
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
                                             RatingBar(rating = show.rating)
-                                            Text(text = "120m", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Image(painter = painterResource(id = R.drawable.timer), contentDescription = "Time", modifier = Modifier.size(width = 18.dp, height = 18.dp).padding(end = 4.dp))
+                                                Text(text = "${show.time}m", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
+                                            }
                                         }
                                     }
                                 }
@@ -144,7 +149,9 @@ fun RatingBar(maxStars: Int = 5, rating: Float) {
                 contentDescription = null,
                 tint = if (isSelected) colorResource(id = R.color.pink)
                         else Color(0x20FFFFFF),
-                modifier = Modifier.width((6f * density).dp).height((6f * density).dp)
+                modifier = Modifier
+                    .width((6f * density).dp)
+                    .height((6f * density).dp)
             )
 
             if (i < maxStars) {
