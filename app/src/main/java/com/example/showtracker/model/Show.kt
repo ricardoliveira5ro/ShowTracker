@@ -28,9 +28,9 @@ object DummyShow {
     val watchlistEmpty = listOf<Show>()
 
     val watchlist = listOf(
-        Show(title = "Mr Robot", imageResourceId = R.drawable.mr_robot, rating = 2f, time = 120),
-        Show(title = "Breaking Bad", imageResourceId = R.drawable.breaking_bad, rating = 5f, time = 95),
-        Show(title = "Bojack Horseman", imageResourceId = R.drawable.bojack_horseman, rating = 3f, time = 110),
+        Show(title = "Mr Robot", imageResourceId = R.drawable.mr_robot, rating = 3f, time = 120),
+        Show(title = "Breaking Bad", imageResourceId = R.drawable.breaking_bad, rating = 4.8f, time = 95),
+        Show(title = "Bojack Horseman", imageResourceId = R.drawable.bojack_horseman, rating = 3.2f, time = 110),
         Show(title = "The Blacklist", imageResourceId = R.drawable.blacklist, rating = 2.5f, time = 84)
     )
 }
