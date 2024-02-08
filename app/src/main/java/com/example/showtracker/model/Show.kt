@@ -33,4 +33,6 @@ object DummyShow {
         Show(title = "Bojack Horseman", imageResourceId = R.drawable.bojack_horseman, rating = 3.2f, time = 110),
         Show(title = "The Blacklist", imageResourceId = R.drawable.blacklist, rating = 2.5f, time = 84)
     )
+
+    var genres = listOf("Action", "Adventure", "Fantasy")
 }
