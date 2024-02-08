@@ -123,7 +123,6 @@ fun Watchlist() {
                                                 .padding(0.dp, 6.dp, 16.dp, 6.dp),
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
-                                            //RatingBar(rating = show.rating)
                                             FractionalRatingBar(rating = show.rating)
                                             Row(
                                                 verticalAlignment = Alignment.CenterVertically
