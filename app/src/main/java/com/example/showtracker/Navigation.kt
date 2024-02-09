@@ -9,17 +9,21 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.showtracker.screens.Home
+import com.example.showtracker.screens.Show
 import com.example.showtracker.screens.Watchlist
 
 @Composable
-fun Navigation(navController: NavController, viewModel: MainViewModel, pd: PaddingValues) {
+fun Navigation(navController: NavController, pd: PaddingValues) {
 
     NavHost(navController = navController as NavHostController, startDestination = Screen.Home.route, modifier = Modifier.padding(pd)) {
         composable(Screen.Home.route) {
-            Home()
+            Home(navController)
         }
         composable(Screen.WatchList.route) {
             Watchlist()
+        }
+        composable(Screen.Show.route) {
+            Show()
         }
     }
 }

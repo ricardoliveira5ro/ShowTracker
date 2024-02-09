@@ -1,11 +1,12 @@
 package com.example.showtracker
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -17,21 +18,26 @@ import com.example.showtracker.screens.BottomBar
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
-fun MainView() {
-
-    val viewModel: MainViewModel = viewModel()
-    val currentScreen = remember {
-        viewModel.currentScreen.value
-    }
-
+fun MainView(viewModel: MainViewModel) {
     val controller: NavController = rememberNavController()
     val navBackStackEntry by controller.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    val currentScreen = when (currentRoute) {
+        Screen.Home.route -> Screen.Home
+        Screen.WatchList.route -> Screen.WatchList
+        Screen.Show.route -> Screen.Show
+        else -> Screen.Home
+    }
+    viewModel.setCurrentScreen(currentScreen)
+
     Scaffold(
-        bottomBar = { BottomBar(currentRoute, controller) }
+        bottomBar = {
+            if (currentScreen is Screen.Home || currentScreen is Screen.WatchList) BottomBar(currentRoute, controller)
+        },
+        contentWindowInsets = if (currentScreen is Screen.Show) WindowInsets.navigationBars else WindowInsets.systemBars
     ) {
-        Navigation(navController = controller, viewModel = viewModel, pd = it)
+        Navigation(navController = controller, pd = it)
     }
 }
 
@@ -43,7 +49,8 @@ fun MainViewPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            MainView()
+            val viewModel = MainViewModel()
+            MainView(viewModel)
         }
     }
 }
