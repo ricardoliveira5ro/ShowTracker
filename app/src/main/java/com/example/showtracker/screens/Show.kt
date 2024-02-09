@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Icon
@@ -33,14 +35,19 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.DummyShow
+import com.example.showtracker.model.Episode
 import com.example.showtracker.ui.theme.ShowTrackerTheme
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Show() {
     val screenHeight = with(LocalDensity.current) { LocalConfiguration.current.screenHeightDp.dp }
@@ -137,7 +144,12 @@ fun Show() {
                             Box(
                                 modifier = Modifier
                                     .padding(end = 5.dp)
-                                    .border(BorderStroke(1.dp, colorResource(id = R.color.blue_font_1)), RoundedCornerShape(6.dp)),
+                                    .border(
+                                        BorderStroke(
+                                            1.dp,
+                                            colorResource(id = R.color.blue_font_1)
+                                        ), RoundedCornerShape(6.dp)
+                                    ),
                             ) {
                                 Text(
                                     text = genre,
@@ -153,6 +165,75 @@ fun Show() {
             }
         }
 
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 16.dp)
+        ) {
+            Text(
+                text = "BoJack é um decadente cavalo que trabalha na TV. Uma estrela já esquecida de uma série da década de 1990 chamada Horsin' Around, ele disfarça a sua baixa auto-estima com uísque e relações fracassadas. Com a ajuda de Todd, o seu parceiro humano, e da ex-amante Princesa Caroline , ele quer deixar novamente a sua marca no mundo do entretenimento",
+                textAlign = TextAlign.Justify,
+                color = Color.White,
+                fontFamily = Typography.robotoFont,
+                fontWeight = FontWeight.Light,
+                fontSize = 13.sp,
+                modifier = Modifier
+                    .height(58.dp)
+                    .verticalScroll(rememberScrollState())
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 6.dp)
+        ) {
+            Text(
+                text = "Your next episode",
+                color = Color.White,
+                fontFamily = Typography.openSans,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
+        }
+
+        val show = DummyShow.shows.first()
+        //Text(text = show.seasons[0].episodes.size.toString())
+        HorizontalPager(count = show.seasons[0].episodes.size, modifier = Modifier.fillMaxWidth()) {
+            page ->
+                EpisodeItem(episode = show.seasons[0].episodes[page])
+        }
+
+    }
+}
+
+@Composable
+fun EpisodeItem(
+    episode: Episode
+) {
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 24.dp, vertical = 8.dp).fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+        ) {
+            Text(
+                text = "Episode ${episode.number}",
+                color = Color.White,
+                fontFamily = Typography.openSans,
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp
+            )
+            Text(
+                text = episode.title,
+                color = Color.White,
+                fontFamily = Typography.openSans,
+                fontSize = 10.sp
+            )
+        }
     }
 }
 
