@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomAppBar
-import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -33,12 +32,14 @@ fun BottomBar(currentRoute: String?, controller: NavController) {
                     selected = selected,
                     onClick = { controller.navigate(item.route) },
                     icon = {
-                        Icon(
-                            painter = painterResource(id = item.icon),
-                            contentDescription = item.title,
-                            modifier = Modifier.size(26.dp),
-                            tint = if (selected) colorResource(id = R.color.pink) else colorResource(id = R.color.grey_button)
-                        )
+                        item.icon?.let { painterResource(id = it) }?.let {
+                            Icon(
+                                painter = it,
+                                contentDescription = item.title,
+                                modifier = Modifier.size(26.dp),
+                                tint = if (selected) colorResource(id = R.color.pink) else colorResource(id = R.color.grey_button)
+                            )
+                        }
                     },
                     modifier = Modifier.padding(vertical = 4.dp)
                 )

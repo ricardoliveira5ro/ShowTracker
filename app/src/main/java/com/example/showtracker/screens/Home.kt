@@ -2,6 +2,7 @@ package com.example.showtracker.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -39,7 +40,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.showtracker.R
+import com.example.showtracker.Screen
 import com.example.showtracker.fonts.Typography.nexaFont
 import com.example.showtracker.fonts.Typography.robotoFont
 import com.example.showtracker.fonts.Typography.openSans
@@ -47,8 +51,10 @@ import com.example.showtracker.model.DummyShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
-fun Home() {
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp)) {
+fun Home(controller: NavController) {
+    LazyColumn(modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 12.dp)) {
         item {
             Row(
                 modifier = Modifier
@@ -120,6 +126,7 @@ fun Home() {
                             modifier = Modifier
                                 .size(width = 240.dp, height = 130.dp)
                                 .padding(end = 12.dp)
+                                .clickable { controller.navigate(Screen.Show.route) }
                         ) {
                             Box(
                                 Modifier.fillMaxSize()
@@ -142,7 +149,9 @@ fun Home() {
         items(DummyShow.recommended.chunked(2)) {
             recommended ->
                 LazyRow(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     items(recommended) { recommended ->
@@ -171,7 +180,8 @@ fun HomePreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Home()
+            val controller = rememberNavController()
+            Home(controller)
         }
     }
 }
