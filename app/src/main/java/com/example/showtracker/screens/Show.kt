@@ -205,15 +205,15 @@ fun Show() {
 
         val show = DummyShow.shows.first()
         val numberOfPages = show.episodes.size
+        val nextEpisodeIndex = show.episodes.indexOfFirst { !it.watched }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 6.dp)
         ) {
-            //val state = rememberPagerState { numberOfPages }
             val state = rememberPagerState (
-                initialPage = 1,
+                initialPage = if (nextEpisodeIndex != -1) nextEpisodeIndex else 0,
                 pageCount = { numberOfPages }
             )
             HorizontalPager(
@@ -225,7 +225,6 @@ fun Show() {
                     EpisodeItem(episode = show.episodes[page], screenWidth, state.currentPage == 0)
             }
         }
-
     }
 }
 
