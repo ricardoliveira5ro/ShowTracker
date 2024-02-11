@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +43,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.showtracker.R
@@ -54,6 +56,7 @@ import com.example.showtracker.ui.theme.ShowTrackerTheme
 @Composable
 fun Show() {
     val screenHeight = with(LocalDensity.current) { LocalConfiguration.current.screenHeightDp.dp }
+    val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -208,12 +211,18 @@ fun Show() {
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 6.dp)
         ) {
-            val state = rememberPagerState { numberOfPages }
+            //val state = rememberPagerState { numberOfPages }
+            val state = rememberPagerState (
+                initialPage = 1,
+                pageCount = { numberOfPages }
+            )
             HorizontalPager(
-                state = state
+                state = state,
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = if (state.currentPage == 0) PaddingValues(end = 42.dp) else PaddingValues(horizontal = 32.dp)
             ) {
                 page ->
-                    EpisodeItem(episode = show.episodes[page])
+                    EpisodeItem(episode = show.episodes[page], screenWidth, state.currentPage == 0)
             }
         }
 
@@ -222,13 +231,20 @@ fun Show() {
 
 @Composable
 fun EpisodeItem(
-    episode: Episode
+    episode: Episode,
+    width: Dp,
+    isFirstEpisode: Boolean
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp)
-            .padding(horizontal = 24.dp, vertical = 6.dp),
+            .height(width / 5)
+            .padding(
+                start = if (isFirstEpisode) 0.dp else 6.dp,
+                top = 0.dp,
+                end = if (isFirstEpisode) 16.dp else 6.dp,
+                bottom = 0.dp
+            ),
         shape = RoundedCornerShape(12.dp),
         backgroundColor = colorResource(id = R.color.blue_bottom_menu)
     ) {
@@ -252,7 +268,8 @@ fun EpisodeItem(
             ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth().padding(bottom = 6.dp),
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
