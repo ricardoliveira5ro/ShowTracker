@@ -3,7 +3,6 @@ package com.example.showtracker.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +22,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Icon
@@ -33,7 +33,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -175,7 +174,7 @@ fun Show() {
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Text(
-                text = "BoJack é um decadente cavalo que trabalha na TV. Uma estrela já esquecida de uma série da década de 1990 chamada Horsin' Around, ele disfarça a sua baixa auto-estima com uísque e relações fracassadas. Com a ajuda de Todd, o seu parceiro humano, e da ex-amante Princesa Caroline , ele quer deixar novamente a sua marca no mundo do entretenimento",
+                text = "Meet the most beloved sitcom horse of the 90s - 20 years later. BoJack Horseman was the star of the hit TV show \"Horsin' Around,\" but today he's washed up, living in Hollywood, complaining about everything, and wearing colorful sweaters.",
                 textAlign = TextAlign.Justify,
                 color = Color.White,
                 fontFamily = Typography.robotoFont,
@@ -225,48 +224,64 @@ fun Show() {
 fun EpisodeItem(
     episode: Episode
 ) {
-    Row(
+    Card(
         modifier = Modifier
-            .size(280.dp, 80.dp)
-            .clip(shape = RoundedCornerShape(12.dp))
-            .background(colorResource(id = R.color.blue_bottom_menu)),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .fillMaxWidth()
+            .height(80.dp)
+            .padding(horizontal = 24.dp, vertical = 6.dp),
+        shape = RoundedCornerShape(12.dp),
+        backgroundColor = colorResource(id = R.color.blue_bottom_menu)
     ) {
-        Column(modifier = Modifier.width(80.dp)) {
-            Image(
-                painter = painterResource(id = R.drawable.bojack_horseman),
-                contentDescription = "Episode",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        }
-
-        Column(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = "S${episode.season.toString().padStart(2, '0')} | E${episode.number.toString().padStart(2, '0')}",
-                color = Color.White,
-                fontFamily = Typography.openSans,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
-            )
-            Spacer(modifier = Modifier.padding(4.dp))
-            Text(
-                text = episode.title,
-                color = Color.White,
-                fontFamily = Typography.robotoFont,
-                fontWeight = FontWeight.Light,
-                fontSize = 10.sp
-            )
-        }
+            Column(modifier = Modifier.width(80.dp)) {
+                Image(
+                    painter = painterResource(id = R.drawable.bojack_horseman),
+                    contentDescription = "Episode",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
 
-        Column {
-            val added = false
-            val icon = if (added) R.drawable.added else R.drawable.add
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 8.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth().padding(bottom = 6.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Text(
+                        text = "S${episode.season.toString().padStart(2, '0')} | E${episode.number.toString().padStart(2, '0')}",
+                        color = Color.White,
+                        fontFamily = Typography.openSans,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp
+                    )
 
-            IconButton(onClick = {  }) {
-                Image(painter = painterResource(id = icon), contentDescription = "Watched", modifier = Modifier.size(24.dp, 24.dp))
+                    val added = false
+                    val icon = if (added) R.drawable.added else R.drawable.add
+
+                    IconButton(onClick = {  }, modifier = Modifier.size(24.dp)) {
+                        Image(
+                            painter = painterResource(id = icon),
+                            contentDescription = "Watched",
+                        )
+                    }
+                }
+
+                Text(
+                    text = episode.title,
+                    color = Color.White,
+                    fontFamily = Typography.robotoFont,
+                    fontWeight = FontWeight.Light,
+                    fontSize = 10.sp
+                )
             }
         }
     }
