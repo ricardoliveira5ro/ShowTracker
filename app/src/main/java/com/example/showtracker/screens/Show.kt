@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -205,15 +206,15 @@ fun Show() {
 
         val show = DummyShow.shows.first()
         val numberOfPages = show.episodes.size
+        val nextEpisodeIndex = show.episodes.indexOfFirst { !it.watched }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 6.dp)
         ) {
-            //val state = rememberPagerState { numberOfPages }
             val state = rememberPagerState (
-                initialPage = 1,
+                initialPage = if (nextEpisodeIndex != -1) nextEpisodeIndex else 0,
                 pageCount = { numberOfPages }
             )
             HorizontalPager(
@@ -226,6 +227,73 @@ fun Show() {
             }
         }
 
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 16.dp)
+        ) {
+            Text(
+                text = "Seasons",
+                color = Color.White,
+                fontFamily = Typography.openSans,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
+        }
+
+        repeat(show.seasons) {
+            seasonIndex ->
+            val seasonEpisodes = show.episodes.filter { it.season == seasonIndex + 1 }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Image(
+                            painter = painterResource(id = R.drawable.play),
+                            contentDescription = "Play Icon",
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+
+                    Column (
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    ) {
+                        Row(
+                        ) {
+                            Text(
+                                text = "Season ${seasonIndex + 1}",
+                                color = Color.White,
+                                fontFamily = Typography.robotoFont,
+                                fontWeight = FontWeight.Light,
+                                fontSize = 14.sp,
+                            )
+                        }
+
+                        Row {
+
+                        }
+                    }
+
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "1/${seasonEpisodes.size}",
+                                color = Color.White,
+                                fontFamily = Typography.robotoFont,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp,
+                            )
+
+                            Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = "Right Icon", tint = Color.White)
+                        }
+                    }
+                }
+        }
     }
 }
 
