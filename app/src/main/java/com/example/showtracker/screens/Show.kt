@@ -29,13 +29,16 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -243,23 +246,30 @@ fun Show() {
 
         repeat(show.seasons) {
             seasonIndex ->
-            val seasonEpisodes = show.episodes.filter { it.season == seasonIndex + 1 }
+                val seasonEpisodes = show.episodes.filter { it.season == seasonIndex + 1 }
+                val seasonEpisodesWatched = seasonEpisodes.count { it.watched }
+
+                val progress = (seasonEpisodesWatched.toFloat() / seasonEpisodes.size.toFloat()) * 100
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(horizontal = 24.dp).padding(bottom = 18.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
                         Image(
                             painter = painterResource(id = R.drawable.play),
                             contentDescription = "Play Icon",
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier.size(32.dp).padding(top = 4.dp)
                         )
                     }
 
                     Column (
-                        modifier = Modifier.padding(horizontal = 12.dp)
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                            .weight(1f)
                     ) {
                         Row(
                         ) {
@@ -268,12 +278,23 @@ fun Show() {
                                 color = Color.White,
                                 fontFamily = Typography.robotoFont,
                                 fontWeight = FontWeight.Light,
-                                fontSize = 14.sp,
+                                fontSize = 15.sp,
                             )
                         }
 
-                        Row {
+                        Spacer(modifier = Modifier.height(8.dp))
 
+                        Row {
+                            LinearProgressIndicator(
+                                progress = progress / 100f,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(4.dp)
+                                    .clip(RoundedCornerShape(16.dp)),
+                                trackColor = colorResource(id = R.color.blue_boxes),
+                                color = colorResource(id = R.color.blue_indicator),
+                                strokeCap = StrokeCap.Round
+                            )
                         }
                     }
 
@@ -282,11 +303,11 @@ fun Show() {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "1/${seasonEpisodes.size}",
+                                text = "$seasonEpisodesWatched/${seasonEpisodes.size}",
                                 color = Color.White,
                                 fontFamily = Typography.robotoFont,
                                 fontWeight = FontWeight.Medium,
-                                fontSize = 14.sp,
+                                fontSize = 15.sp,
                             )
 
                             Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = "Right Icon", tint = Color.White)

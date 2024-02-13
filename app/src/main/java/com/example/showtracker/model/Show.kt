@@ -24,14 +24,33 @@ data class Episode (
 object DummyShow {
     private val episodes = listOf(
         Episode(title = "The BoJack Horseman Story", number = 1, season = 1, watched = true),
-        Episode(title = "BoJack Hates the Troops", number = 2, season = 1),
-        Episode(title = "Prickly-Muffin", number = 3, season = 1),
+        Episode(title = "BoJack Hates the Troops", number = 2, season = 1, watched = true),
+        Episode(title = "Prickly-Muffin", number = 3, season = 1, watched = true),
         Episode(title = "Zoës and Zeldas", number = 4, season = 1),
-        Episode(title = "Live Fast, Diane Nguyen", number = 5, season = 1)
+        Episode(title = "Live Fast, Diane Nguyen", number = 5, season = 1),
+
+        Episode(title = "The BoJack Horseman Story", number = 1, season = 2),
+        Episode(title = "BoJack Hates the Troops", number = 2, season = 2),
+        Episode(title = "Prickly-Muffin", number = 3, season = 2),
+        Episode(title = "Zoës and Zeldas", number = 4, season = 2),
+        Episode(title = "Live Fast, Diane Nguyen", number = 5, season = 2),
+        Episode(title = "Zoës and Zeldas", number = 6, season = 2),
+        Episode(title = "Live Fast, Diane Nguyen", number = 7, season = 2),
+
+        Episode(title = "The BoJack Horseman Story", number = 1, season = 3),
+        Episode(title = "BoJack Hates the Troops", number = 2, season = 3),
+        Episode(title = "Prickly-Muffin", number = 3, season = 3),
+        Episode(title = "Zoës and Zeldas", number = 4, season = 3),
+        Episode(title = "Live Fast, Diane Nguyen", number = 5, season = 3),
+        Episode(title = "The BoJack Horseman Story", number = 6, season = 3),
+        Episode(title = "BoJack Hates the Troops", number = 7, season = 3),
+        Episode(title = "Prickly-Muffin", number = 8, season = 3),
+        Episode(title = "Zoës and Zeldas", number = 9, season = 3),
+        Episode(title = "Live Fast, Diane Nguyen", number = 10, season = 3)
     )
 
     val shows = listOf(
-        Show(title = "The Witcher", imageResourceId = R.drawable.the_witcher, rating = 5f, time = 120, seasons = 1, episodes = episodes),
+        Show(title = "The Witcher", imageResourceId = R.drawable.the_witcher, rating = 5f, time = 120, seasons = 3, episodes = episodes),
         Show(title = "Final Space", imageResourceId = R.drawable.final_space, rating = 4f, time = 95, seasons = 1, episodes = episodes),
         Show(title = "Rick & Morty", imageResourceId = R.drawable.rick_and_morty, rating = 3f, time = 110, seasons = 1, episodes = episodes)
     )
