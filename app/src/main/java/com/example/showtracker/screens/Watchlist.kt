@@ -74,72 +74,100 @@ fun Watchlist() {
 
         Spacer(modifier = Modifier.padding(vertical = 12.dp))
 
-        LazyColumn(
 
-        ) {
-            items(DummyShow.watchlist) {
-                show ->
-
-                    BoxWithConstraints(
-                        modifier = Modifier.padding(vertical = 12.dp)
-                    ) {
-
-                        val boxWidth = this.maxWidth
-                        Card(
-                            modifier = Modifier
-                                .size(width = boxWidth / 3.5f, height = 140.dp)
-                                .zIndex(2f),
-                            shape = RoundedCornerShape(6.dp)
+        val showList = DummyShow.watchlist //DummyShow.testEmptyList
+        if (showList.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 18.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(painter = painterResource(id = R.drawable.nothing), contentDescription = "Nothing here", modifier = Modifier.size(130.dp))
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "Nothing to show yet",
+                    color = colorResource(id = R.color.blue_font_1),
+                    fontFamily = Typography.robotoFont,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 13.sp
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Explore more and find your next favorite show!",
+                    color = Color.White,
+                    fontFamily = Typography.robotoFont,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 13.sp
+                )
+            }
+        }
+        else {
+            LazyColumn {
+                items(showList) {
+                    show ->
+                        BoxWithConstraints(
+                            modifier = Modifier.padding(vertical = 12.dp)
                         ) {
-                            Image(painter = painterResource(id = show.imageResourceId), contentDescription = show.title, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-                        }
-                        Column() {
-                            Spacer(modifier = Modifier
-                                .height(20.dp)
-                                .width(10.dp))
-                            Row( ) {
-                                Spacer(modifier = Modifier.width(20.dp))
-                                Card(
-                                    modifier = Modifier.size(width = boxWidth, height = 130.dp),
-                                    shape = RoundedCornerShape(6.dp),
-                                    colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.blue_boxes))
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(start = 95.dp),
-                                        verticalArrangement = Arrangement.Center
-                                    ) {
-                                        Row(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                        ) {
-                                            Text(text = show.title, color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Medium, fontSize = 18.sp)
-                                        }
 
-                                        Row(
+                            val boxWidth = this.maxWidth
+                            Card(
+                                modifier = Modifier
+                                    .size(width = boxWidth / 3.5f, height = 140.dp)
+                                    .zIndex(2f),
+                                shape = RoundedCornerShape(6.dp)
+                            ) {
+                                Image(painter = painterResource(id = show.imageResourceId), contentDescription = show.title, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                            }
+                            Column() {
+                                Spacer(modifier = Modifier
+                                    .height(20.dp)
+                                    .width(10.dp))
+                                Row( ) {
+                                    Spacer(modifier = Modifier.width(20.dp))
+                                    Card(
+                                        modifier = Modifier.size(width = boxWidth, height = 130.dp),
+                                        shape = RoundedCornerShape(6.dp),
+                                        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.blue_boxes))
+                                    ) {
+                                        Column(
                                             modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(0.dp, 6.dp, 16.dp, 6.dp),
-                                            horizontalArrangement = Arrangement.SpaceBetween
+                                                .fillMaxSize()
+                                                .padding(start = 95.dp),
+                                            verticalArrangement = Arrangement.Center
                                         ) {
-                                            FractionalRatingBar(rating = show.rating)
                                             Row(
-                                                verticalAlignment = Alignment.CenterVertically
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
                                             ) {
-                                                Image(painter = painterResource(id = R.drawable.timer), contentDescription = "Time", modifier = Modifier
-                                                    .size(width = 18.dp, height = 18.dp)
-                                                    .padding(end = 4.dp))
-                                                Text(text = "${show.time}m", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
+                                                Text(text = show.title, color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Medium, fontSize = 18.sp)
+                                            }
+
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(0.dp, 6.dp, 16.dp, 6.dp),
+                                                horizontalArrangement = Arrangement.SpaceBetween
+                                            ) {
+                                                FractionalRatingBar(rating = show.rating)
+                                                Row(
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    Image(painter = painterResource(id = R.drawable.timer), contentDescription = "Time", modifier = Modifier
+                                                        .size(width = 18.dp, height = 18.dp)
+                                                        .padding(end = 4.dp))
+                                                    Text(text = "${show.time}m", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
+                }
             }
         }
+
     }
 }
 

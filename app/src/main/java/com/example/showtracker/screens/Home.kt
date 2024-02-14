@@ -118,24 +118,59 @@ fun Home(controller: NavController) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             ) {
-                LazyRow {
-                    items (DummyShow.shows) {
+                val showList = DummyShow.shows //DummyShow.testEmptyList
+                if (showList.isEmpty()) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.nothing),
+                            contentDescription = "Nothing to show",
+                            modifier = Modifier.size(65.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = "Nothing to show yet",
+                            color = colorResource(id = R.color.blue_font_1),
+                            fontFamily = robotoFont,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
+                else {
+                    LazyRow {
+                        items(showList) {
                             show ->
-                        ElevatedCard (
-                            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-                            modifier = Modifier
-                                .size(width = 240.dp, height = 130.dp)
-                                .padding(end = 12.dp)
-                                .clickable { controller.navigate(Screen.Show.route) }
-                        ) {
-                            Box(
-                                Modifier.fillMaxSize()
-                            ) {
-                                Image(painter = painterResource(id = show.imageResourceId), contentDescription = show.title, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-                                Text(text = show.title, modifier = Modifier
-                                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                                    .align(Alignment.BottomStart), color = Color.White, fontFamily = openSans, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                            }
+                                ElevatedCard(
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                                    modifier = Modifier
+                                        .size(width = 240.dp, height = 130.dp)
+                                        .padding(end = 12.dp)
+                                        .clickable { controller.navigate(Screen.Show.route) }
+                                ) {
+                                    Box(
+                                        Modifier.fillMaxSize()
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = show.imageResourceId),
+                                            contentDescription = show.title,
+                                            modifier = Modifier.fillMaxSize(),
+                                            contentScale = ContentScale.Crop
+                                        )
+                                        Text(
+                                            text = show.title,
+                                            modifier = Modifier
+                                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                                                .align(Alignment.BottomStart),
+                                            color = Color.White,
+                                            fontFamily = openSans,
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 18.sp
+                                        )
+                                    }
+                                }
                         }
                     }
                 }

@@ -62,7 +62,7 @@ object DummyShow {
         Show(title = "The Blacklist", imageResourceId = R.drawable.blacklist, rating = 3f, time = 110, seasons = 1, episodes = episodes)
     )
 
-    val watchlistEmpty = listOf<Show>()
+    val testEmptyList = listOf<Show>()
 
     val watchlist = listOf(
         Show(title = "Mr Robot", imageResourceId = R.drawable.mr_robot, rating = 3f, time = 120, seasons = 1, episodes = episodes),
