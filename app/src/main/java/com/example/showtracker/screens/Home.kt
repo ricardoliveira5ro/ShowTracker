@@ -32,6 +32,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -52,6 +54,8 @@ import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
 fun Home(controller: NavController) {
+    val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
+
     LazyColumn(modifier = Modifier
         .fillMaxSize()
         .padding(horizontal = 12.dp)) {
@@ -146,7 +150,7 @@ fun Home(controller: NavController) {
                                 ElevatedCard(
                                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                                     modifier = Modifier
-                                        .size(width = 240.dp, height = 130.dp)
+                                        .size(width = screenWidth / 1.6f, height = screenWidth / 3f)
                                         .padding(end = 12.dp)
                                         .clickable { controller.navigate(Screen.Show.route) }
                                 ) {
@@ -192,7 +196,7 @@ fun Home(controller: NavController) {
                     items(recommended) { recommended ->
                         ElevatedCard(
                             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-                            modifier = Modifier.size(155.dp, 260.dp)
+                            modifier = Modifier.size(width = screenWidth / 2.5f, height = screenWidth / 1.6f)
                         ) {
                             Image(
                                 painter = painterResource(id = recommended.imageResourceId),
