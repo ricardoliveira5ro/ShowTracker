@@ -1,7 +1,6 @@
 package com.example.showtracker.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,30 +14,21 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,35 +67,7 @@ fun Home(controller: NavController) {
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
-                val inputvalue = remember { mutableStateOf(TextFieldValue()) }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(colorResource(id = R.color.blue_boxes))
-                ) {
-                    Row (
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        Icon(painter = painterResource(id = R.drawable.search_icon), contentDescription = "Search", tint = colorResource(id = R.color.blue_font_1), modifier = Modifier.padding(end = 10.dp))
-                        BasicTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = inputvalue.value,
-                            onValueChange = { inputvalue.value = it },
-                            textStyle = TextStyle(color = colorResource(id = R.color.blue_font_1), fontFamily = robotoFont, fontWeight = FontWeight.Normal, fontSize = 17.sp),
-                            decorationBox = { innerTextField ->
-                                Row(modifier = Modifier.fillMaxWidth()) {
-                                    if (inputvalue.value.text.isEmpty()) {
-                                        Text(text = "Search", color = colorResource(id = R.color.blue_font_1), fontFamily = robotoFont, fontWeight = FontWeight.Normal, fontSize = 16.sp)
-                                    }
-                                }
-                                innerTextField()
-                            },
-                            cursorBrush = SolidColor(colorResource(id = R.color.pink))
-                        )
-                    }
-                }
+                SearchBar()
             }
 
 
