@@ -45,7 +45,7 @@ fun Search() {
         )
         Spacer(modifier = Modifier.height(12.dp))
 
-        SearchBar(onSearchInputChanged = { input -> searchInput = input })
+        SearchBar(onSearchInputChanged = { input -> searchInput = input }, onSearchSubmitted = { })
         Spacer(modifier = Modifier.height(12.dp))
 
         ShowList(showList = filteredShows)

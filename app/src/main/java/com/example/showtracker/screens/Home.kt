@@ -72,7 +72,10 @@ fun Home(controller: NavController) {
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
-                SearchBar(onSearchInputChanged = { input -> searchInput = input })
+                SearchBar(
+                    onSearchInputChanged = { input -> searchInput = input },
+                    onSearchSubmitted = { controller.navigate(Screen.Search.route) }
+                )
             }
 
 

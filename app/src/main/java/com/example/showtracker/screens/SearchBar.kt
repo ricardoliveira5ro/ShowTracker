@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,6 +24,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,7 +34,7 @@ import com.example.showtracker.fonts.Typography
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
-fun SearchBar(onSearchInputChanged: (String) -> Unit) {
+fun SearchBar(onSearchInputChanged: (String) -> Unit, onSearchSubmitted: () -> Unit) {
     val inputValue = remember { mutableStateOf(TextFieldValue()) }
     Box(
         modifier = Modifier
@@ -60,7 +63,9 @@ fun SearchBar(onSearchInputChanged: (String) -> Unit) {
                     }
                     innerTextField()
                 },
-                cursorBrush = SolidColor(colorResource(id = R.color.pink))
+                cursorBrush = SolidColor(colorResource(id = R.color.pink)),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { onSearchSubmitted() })
             )
         }
     }
@@ -73,7 +78,7 @@ fun SearchBarPreview() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            SearchBar(onSearchInputChanged = { })
+            SearchBar(onSearchInputChanged = { }, onSearchSubmitted = { })
         }
     }
 }
