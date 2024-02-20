@@ -26,8 +26,10 @@ fun Navigation(navController: NavController, pd: PaddingValues) {
         composable(Screen.Show.route) {
             Show()
         }
-        composable(Screen.Search.route) {
-            Search()
+        composable(Screen.Search.route + "/{searchInput}") {
+            backStackEntry ->
+                val searchInput = backStackEntry.arguments?.getString("searchInput") ?: ""
+                Search(searchInput)
         }
     }
 }

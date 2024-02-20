@@ -74,7 +74,8 @@ fun Home(controller: NavController) {
             ) {
                 SearchBar(
                     onSearchInputChanged = { input -> searchInput = input },
-                    onSearchSubmitted = { controller.navigate(Screen.Search.route) }
+                    onSearchSubmitted = { controller.navigate(Screen.Search.route + "/$searchInput") },
+                    searchInput
                 )
             }
 

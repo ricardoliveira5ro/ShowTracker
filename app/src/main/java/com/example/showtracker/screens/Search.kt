@@ -9,10 +9,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,10 +25,16 @@ import com.example.showtracker.model.DummyShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
-fun Search() {
+fun Search(initialSearchInput: String) {
     val allShows = remember { DummyShow.shows }
-    var searchInput by remember { mutableStateOf("") }
-    val filteredShows = allShows.filter { it.title.contains(searchInput, ignoreCase = true) }
+
+    val (searchInput, setSearchInput) = remember { mutableStateOf(initialSearchInput) }
+
+    val filteredShows by remember(searchInput) {
+        derivedStateOf {
+            allShows.filter { it.title.contains(searchInput, ignoreCase = true) }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -45,7 +51,7 @@ fun Search() {
         )
         Spacer(modifier = Modifier.height(12.dp))
 
-        SearchBar(onSearchInputChanged = { input -> searchInput = input }, onSearchSubmitted = { })
+        SearchBar(onSearchInputChanged = setSearchInput, onSearchSubmitted = { }, initialSearchInput)
         Spacer(modifier = Modifier.height(12.dp))
 
         ShowList(showList = filteredShows)
@@ -60,7 +66,7 @@ fun SearchPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Search()
+            Search("")
         }
     }
 }
