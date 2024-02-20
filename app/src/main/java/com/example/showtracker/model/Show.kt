@@ -52,7 +52,11 @@ object DummyShow {
     val shows = listOf(
         Show(title = "The Witcher", imageResourceId = R.drawable.the_witcher, rating = 5f, time = 120, seasons = 3, episodes = episodes),
         Show(title = "Final Space", imageResourceId = R.drawable.final_space, rating = 4f, time = 95, seasons = 1, episodes = episodes),
-        Show(title = "Rick & Morty", imageResourceId = R.drawable.rick_and_morty, rating = 3f, time = 110, seasons = 1, episodes = episodes)
+        Show(title = "Rick & Morty", imageResourceId = R.drawable.rick_and_morty, rating = 3f, time = 110, seasons = 1, episodes = episodes),
+        Show(title = "Mr Robot", imageResourceId = R.drawable.mr_robot, rating = 5f, time = 120, seasons = 1, episodes = episodes),
+        Show(title = "Breaking Bad", imageResourceId = R.drawable.breaking_bad, rating = 2f, time = 95, seasons = 1, episodes = episodes),
+        Show(title = "Bojack Horseman", imageResourceId = R.drawable.bojack_horseman, rating = 4f, time = 110, seasons = 1, episodes = episodes),
+        Show(title = "The Blacklist", imageResourceId = R.drawable.blacklist, rating = 3f, time = 110, seasons = 1, episodes = episodes)
     )
 
     val recommended = listOf(
