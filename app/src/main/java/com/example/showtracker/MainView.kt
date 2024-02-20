@@ -33,7 +33,7 @@ fun MainView(viewModel: MainViewModel) {
 
     Scaffold(
         bottomBar = {
-            if (currentScreen is Screen.Home || currentScreen is Screen.WatchList) BottomBar(currentRoute, controller)
+            if (currentScreen is Screen.Home || currentScreen is Screen.WatchList || currentScreen is Screen.Search) BottomBar(currentRoute, controller)
         },
         contentWindowInsets = if (currentScreen is Screen.Show) WindowInsets.navigationBars else WindowInsets.systemBars
     ) {
