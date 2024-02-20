@@ -44,13 +44,14 @@ import androidx.compose.ui.zIndex
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.DummyShow
+import com.example.showtracker.model.Show
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 import kotlin.math.ceil
 import kotlin.math.floor
 
 @Composable
-fun ShowList() {
-    val showList = DummyShow.watchlist //DummyShow.testEmptyList
+fun ShowList(showList: List<Show>) {
+    //val showList = DummyShow.watchlist //DummyShow.testEmptyList
     if (showList.isEmpty()) {
         Column(
             modifier = Modifier
@@ -231,11 +232,12 @@ private fun createStarPath(width: Float, height: Float): Path {
 @Preview(showBackground = true)
 @Composable
 fun ShowListPreview() {
+    val showList = DummyShow.watchlist
     ShowTrackerTheme {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            ShowList()
+            ShowList(showList)
         }
     }
 }
