@@ -14,6 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,10 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
+import com.example.showtracker.model.DummyShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
 fun Watchlist() {
+    val watchlist = remember { DummyShow.watchlist }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,7 +56,7 @@ fun Watchlist() {
 
         Spacer(modifier = Modifier.padding(vertical = 12.dp))
 
-        ShowList()
+        ShowList(showList = watchlist)
     }
 }
 

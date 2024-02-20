@@ -31,7 +31,7 @@ import com.example.showtracker.fonts.Typography
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
-fun SearchBar() {
+fun SearchBar(onSearchInputChanged: (String) -> Unit) {
     val inputValue = remember { mutableStateOf(TextFieldValue()) }
     Box(
         modifier = Modifier
@@ -47,7 +47,10 @@ fun SearchBar() {
             BasicTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = inputValue.value,
-                onValueChange = { inputValue.value = it },
+                onValueChange = {
+                    inputValue.value = it
+                    onSearchInputChanged(it.text)
+                },
                 textStyle = TextStyle(color = colorResource(id = R.color.blue_font_1), fontFamily = Typography.robotoFont, fontWeight = FontWeight.Normal, fontSize = 17.sp),
                 decorationBox = { innerTextField ->
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -70,7 +73,7 @@ fun SearchBarPreview() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            SearchBar()
+            SearchBar(onSearchInputChanged = { })
         }
     }
 }
