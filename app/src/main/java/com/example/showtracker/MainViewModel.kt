@@ -10,9 +10,6 @@ import com.example.showtracker.model.DiscoverShow
 import kotlinx.coroutines.launch
 
 class MainViewModel:ViewModel() {
-
-    private val apiService = RetrofitClient.apiService
-
     private val _currentScreen: MutableState<Screen> = mutableStateOf(Screen.Home)
 
     private val _tvShowState = mutableStateOf(DiscoverShowState())
