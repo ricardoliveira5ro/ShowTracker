@@ -15,6 +15,9 @@ class MainViewModel:ViewModel() {
     private val _tvShowListState = mutableStateOf(TVShowListState())
     val tvShowListState: State<TVShowListState> = _tvShowListState
 
+    private val _tvShowSearchState = mutableStateOf(TVShowListState())
+    val tvShowSearchState: State<TVShowListState> = _tvShowSearchState
+
     init {
         fetchTVShowList()
     }
@@ -40,6 +43,24 @@ class MainViewModel:ViewModel() {
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Error fetching TV shows: ${e.message}", e)
                 _tvShowListState.value = _tvShowListState.value.copy(
+                    error = "Error fetching TV Shows ${e.message}"
+                )
+            }
+        }
+    }
+
+    fun fetchTVShowSearch(query: String) {
+        viewModelScope.launch {
+            try {
+                val response = apiService.getTVShowsBySearch(query)
+                _tvShowSearchState.value = _tvShowSearchState.value.copy(
+                    list = response.results,
+                    error = null
+                )
+
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Error fetching search TV shows: ${e.message}", e)
+                _tvShowSearchState.value = _tvShowSearchState.value.copy(
                     error = "Error fetching TV Shows ${e.message}"
                 )
             }
