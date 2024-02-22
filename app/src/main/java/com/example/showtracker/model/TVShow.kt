@@ -19,13 +19,6 @@ data class TVShowShort(
     val poster_path: String
 )
 
-data class DiscoverShow(
-    val id: Int,
-    val name: String
-)
-
 data class TVShowsResponse(val tvShows: List<TVShow>)
-
-data class DiscoverShowResponse(val results: List<DiscoverShow>)
 
 data class TVShowsShortResponse(val results: List<TVShowShort>)
