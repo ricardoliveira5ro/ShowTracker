@@ -13,6 +13,12 @@ data class TVShow(
     val backdrop_path: String
 )
 
+data class TVShowShort(
+    val id: Int,
+    val name: String,
+    val poster_path: String
+)
+
 data class DiscoverShow(
     val id: Int,
     val name: String
@@ -21,3 +27,5 @@ data class DiscoverShow(
 data class TVShowsResponse(val tvShows: List<TVShow>)
 
 data class DiscoverShowResponse(val results: List<DiscoverShow>)
+
+data class TVShowsShortResponse(val results: List<TVShowShort>)

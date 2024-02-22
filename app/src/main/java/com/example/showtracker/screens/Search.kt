@@ -48,7 +48,7 @@ fun Search(initialSearchInput: String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = tvShowState.list.size.toString(),
+            text = "Explore",
             color = Color.White,
             fontFamily = Typography.openSans,
             fontWeight = FontWeight.Bold,
