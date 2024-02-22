@@ -36,8 +36,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
+import com.example.showtracker.MainViewModel
 import com.example.showtracker.R
 import com.example.showtracker.Screen
 import com.example.showtracker.fonts.Typography.nexaFont
@@ -50,6 +53,11 @@ import com.example.showtracker.ui.theme.ShowTrackerTheme
 fun Home(controller: NavController) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
     var searchInput by remember { mutableStateOf("") }
+
+    val viewModel: MainViewModel = viewModel()
+    val tvShowListState by viewModel.tvShowListState
+
+    val baseImageUrl = "https://image.tmdb.org/t/p/original"
 
     LazyColumn(modifier = Modifier
         .fillMaxSize()
@@ -156,7 +164,7 @@ fun Home(controller: NavController) {
             Text(text = "Recommended for you", modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), color = Color.White, fontFamily = openSans, fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
 
-        items(DummyShow.recommended.chunked(2)) {
+        items(tvShowListState.list.chunked(2)) {
             recommended ->
                 LazyRow(
                     modifier = Modifier
@@ -170,8 +178,8 @@ fun Home(controller: NavController) {
                             modifier = Modifier.size(width = screenWidth / 2.5f, height = screenWidth / 1.6f)
                         ) {
                             Image(
-                                painter = painterResource(id = recommended.imageResourceId),
-                                contentDescription = recommended.title,
+                                painter = rememberAsyncImagePainter(baseImageUrl + recommended.poster_path),
+                                contentDescription = recommended.name,
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop
                             )
