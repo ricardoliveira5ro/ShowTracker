@@ -12,7 +12,7 @@ data class TVShow(
     val poster_path: String,
     val backdrop_path: String,
     val vote_average: Float,
-    val vote_count: String
+    val vote_count: Int
 )
 
 data class TVShowShort(
@@ -21,7 +21,7 @@ data class TVShowShort(
     val poster_path: String,
     val backdrop_path: String,
     val vote_average: Float,
-    val vote_count: String
+    val vote_count: Int
 )
 
 data class TVShowsResponse(val tvShows: List<TVShow>)
