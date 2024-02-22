@@ -20,4 +20,11 @@ interface APIService {
         @Query("page") page: Int = 1,
         @Query("api_key") apiKey: String = BuildConfig.tmdbKey
     ):TVShowsShortResponse
+
+    @GET("search/tv")
+    suspend fun getTVShowsBySearch(
+        @Query("query") query: String,
+        @Query("page") page: Int = 1,
+        @Query("api_key") apiKey: String = BuildConfig.tmdbKey
+    ):TVShowsShortResponse
 }

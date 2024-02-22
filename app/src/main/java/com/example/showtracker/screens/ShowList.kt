@@ -41,17 +41,16 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import coil.compose.rememberAsyncImagePainter
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
-import com.example.showtracker.model.DummyShow
-import com.example.showtracker.model.Show
+import com.example.showtracker.model.TVShowShort
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 import kotlin.math.ceil
 import kotlin.math.floor
 
 @Composable
-fun ShowList(showList: List<Show>) {
-    //val showList = DummyShow.watchlist //DummyShow.testEmptyList
+fun ShowList(showList: List<TVShowShort>) {
     if (showList.isEmpty()) {
         Column(
             modifier = Modifier
@@ -81,65 +80,65 @@ fun ShowList(showList: List<Show>) {
     else {
         LazyColumn {
             items(showList) {
-                    show ->
-                BoxWithConstraints(
-                    modifier = Modifier.padding(vertical = 12.dp)
-                ) {
-
-                    val boxWidth = this.maxWidth
-                    Card(
-                        modifier = Modifier
-                            .size(width = boxWidth / 3.5f, height = 140.dp)
-                            .zIndex(2f),
-                        shape = RoundedCornerShape(6.dp)
+                show ->
+                    BoxWithConstraints(
+                        modifier = Modifier.padding(vertical = 12.dp)
                     ) {
-                        Image(painter = painterResource(id = show.imageResourceId), contentDescription = show.title, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-                    }
-                    Column() {
-                        Spacer(modifier = Modifier
-                            .height(20.dp)
-                            .width(10.dp))
-                        Row( ) {
-                            Spacer(modifier = Modifier.width(20.dp))
-                            Card(
-                                modifier = Modifier.size(width = boxWidth, height = 130.dp),
-                                shape = RoundedCornerShape(6.dp),
-                                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.blue_boxes))
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(start = 95.dp),
-                                    verticalArrangement = Arrangement.Center
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                    ) {
-                                        Text(text = show.title, color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Medium, fontSize = 18.sp)
-                                    }
 
-                                    Row(
+                        val boxWidth = this.maxWidth
+                        val baseImageUrl = "https://image.tmdb.org/t/p/original"
+                        val painter = if (show.poster_path != null) rememberAsyncImagePainter(baseImageUrl + show.poster_path)
+                                        else painterResource(id = R.drawable.no_image)
+
+                        Card(
+                            modifier = Modifier
+                                .size(width = boxWidth / 3.5f, height = 140.dp)
+                                .zIndex(2f),
+                            shape = RoundedCornerShape(6.dp)
+                        ) {
+                            Image(painter = painter, contentDescription = show.name, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                        }
+                        Column() {
+                            Spacer(modifier = Modifier
+                                .height(20.dp)
+                                .width(10.dp))
+                            Row( ) {
+                                Spacer(modifier = Modifier.width(20.dp))
+                                Card(
+                                    modifier = Modifier.size(width = boxWidth, height = 130.dp),
+                                    shape = RoundedCornerShape(6.dp),
+                                    colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.blue_boxes))
+                                ) {
+                                    Column(
                                         modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(0.dp, 6.dp, 16.dp, 6.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween
+                                            .fillMaxSize()
+                                            .padding(start = 95.dp),
+                                        verticalArrangement = Arrangement.Center
                                     ) {
-                                        FractionalRatingBar(rating = show.rating)
                                         Row(
-                                            verticalAlignment = Alignment.CenterVertically
+                                            modifier = Modifier
+                                                .fillMaxWidth()
                                         ) {
-                                            Image(painter = painterResource(id = R.drawable.timer), contentDescription = "Time", modifier = Modifier
-                                                .size(width = 18.dp, height = 18.dp)
-                                                .padding(end = 4.dp))
-                                            Text(text = "${show.time}m", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
+                                            Text(text = show.name, color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Medium, fontSize = 18.sp)
+                                        }
+
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(0.dp, 6.dp, 16.dp, 6.dp),
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            Row {
+                                                FractionalRatingBar(rating = show.vote_average / 2)
+                                                Spacer(modifier = Modifier.width(4.dp))
+                                                Text(text = "(${show.vote_count})", color = Color.White, fontFamily = Typography.robotoFont, fontWeight = FontWeight.Light, fontSize = 14.sp)
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                }
             }
         }
     }
@@ -232,12 +231,12 @@ private fun createStarPath(width: Float, height: Float): Path {
 @Preview(showBackground = true)
 @Composable
 fun ShowListPreview() {
-    val showList = DummyShow.watchlist
+    //val showList = DummyShow.watchlist
     ShowTrackerTheme {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            ShowList(showList)
+            //ShowList(showList)
         }
     }
 }

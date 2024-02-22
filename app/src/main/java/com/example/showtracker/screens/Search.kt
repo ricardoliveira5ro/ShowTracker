@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,21 +19,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.showtracker.MainViewModel
 import com.example.showtracker.fonts.Typography
-import com.example.showtracker.model.DummyShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
 fun Search(initialSearchInput: String) {
-    val allShows = remember { DummyShow.shows }
+    val viewModel: MainViewModel = viewModel()
 
     val (searchInput, setSearchInput) = remember { mutableStateOf(initialSearchInput) }
+    viewModel.fetchTVShowSearch(searchInput)
 
-    val filteredShows by remember(searchInput) {
-        derivedStateOf {
-            allShows.filter { it.title.contains(searchInput, ignoreCase = true) }
-        }
-    }
+    val tvShowSearchState by viewModel.tvShowSearchState
 
     Column(
         modifier = Modifier
@@ -54,7 +51,7 @@ fun Search(initialSearchInput: String) {
         SearchBar(onSearchInputChanged = setSearchInput, onSearchSubmitted = { }, initialSearchInput)
         Spacer(modifier = Modifier.height(12.dp))
 
-        ShowList(showList = filteredShows)
+        ShowList(showList = tvShowSearchState.list)
     }
 }
 

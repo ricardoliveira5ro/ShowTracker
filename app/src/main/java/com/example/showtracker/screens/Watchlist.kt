@@ -56,7 +56,7 @@ fun Watchlist() {
 
         Spacer(modifier = Modifier.padding(vertical = 12.dp))
 
-        ShowList(showList = watchlist)
+        //ShowList(showList = watchlist)
     }
 }
 

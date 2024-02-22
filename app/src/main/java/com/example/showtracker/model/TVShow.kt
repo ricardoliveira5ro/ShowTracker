@@ -10,13 +10,18 @@ data class TVShow(
     val first_air_date: String,
     val last_air_date: String,
     val poster_path: String,
-    val backdrop_path: String
+    val backdrop_path: String,
+    val vote_average: Float,
+    val vote_count: String
 )
 
 data class TVShowShort(
     val id: Int,
     val name: String,
-    val poster_path: String
+    val poster_path: String,
+    val backdrop_path: String,
+    val vote_average: Float,
+    val vote_count: String
 )
 
 data class TVShowsResponse(val tvShows: List<TVShow>)
