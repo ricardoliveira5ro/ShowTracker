@@ -9,8 +9,8 @@ data class TVShow(
     val episode_run_time: Int,
     val first_air_date: String,
     val last_air_date: String,
-    val poster_path: String,
-    val backdrop_path: String,
+    val poster_path: String?,
+    val backdrop_path: String?,
     val vote_average: Float,
     val vote_count: Int
 )
@@ -18,8 +18,8 @@ data class TVShow(
 data class TVShowShort(
     val id: Int,
     val name: String,
-    val poster_path: String,
-    val backdrop_path: String,
+    val poster_path: String?,
+    val backdrop_path: String?,
     val vote_average: Float,
     val vote_count: Int
 )
