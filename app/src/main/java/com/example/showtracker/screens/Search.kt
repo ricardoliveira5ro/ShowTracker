@@ -20,17 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.showtracker.MainViewModel
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.DummyShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
 fun Search(initialSearchInput: String) {
-    val viewModel: MainViewModel = viewModel()
-    val tvShowState by viewModel.tvShowState
-
     val allShows = remember { DummyShow.shows }
 
     val (searchInput, setSearchInput) = remember { mutableStateOf(initialSearchInput) }
