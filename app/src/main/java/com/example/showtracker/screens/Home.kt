@@ -50,11 +50,10 @@ import com.example.showtracker.model.DummyShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
-fun Home(controller: NavController) {
+fun Home(viewModel: MainViewModel, controller: NavController) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
     var searchInput by remember { mutableStateOf("") }
 
-    val viewModel: MainViewModel = viewModel()
     val tvShowListState by viewModel.tvShowListState
 
     val baseImageUrl = "https://image.tmdb.org/t/p/original"
@@ -198,8 +197,9 @@ fun HomePreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
+            val viewModel: MainViewModel = viewModel()
             val controller = rememberNavController()
-            Home(controller)
+            Home(viewModel, controller)
         }
     }
 }

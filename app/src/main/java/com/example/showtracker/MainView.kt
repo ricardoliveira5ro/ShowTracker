@@ -37,7 +37,7 @@ fun MainView(viewModel: MainViewModel) {
         },
         contentWindowInsets = if (currentScreen is Screen.Show) WindowInsets.navigationBars else WindowInsets.systemBars
     ) {
-        Navigation(navController = controller, pd = it)
+        Navigation(viewModel = viewModel, navController = controller, pd = it)
     }
 }
 

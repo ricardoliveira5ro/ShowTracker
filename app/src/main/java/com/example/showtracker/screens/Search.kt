@@ -25,9 +25,7 @@ import com.example.showtracker.fonts.Typography
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
-fun Search(initialSearchInput: String) {
-    val viewModel: MainViewModel = viewModel()
-
+fun Search(viewModel: MainViewModel, initialSearchInput: String) {
     val (searchInput, setSearchInput) = remember { mutableStateOf(initialSearchInput) }
     viewModel.fetchTVShowSearch(searchInput)
 
@@ -63,7 +61,8 @@ fun SearchPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Search("")
+            val viewModel: MainViewModel = viewModel()
+            Search(viewModel, "")
         }
     }
 }

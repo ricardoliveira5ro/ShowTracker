@@ -14,11 +14,11 @@ import com.example.showtracker.screens.Show
 import com.example.showtracker.screens.Watchlist
 
 @Composable
-fun Navigation(navController: NavController, pd: PaddingValues) {
+fun Navigation(viewModel: MainViewModel, navController: NavController, pd: PaddingValues) {
 
     NavHost(navController = navController as NavHostController, startDestination = Screen.Home.route, modifier = Modifier.padding(pd)) {
         composable(Screen.Home.route) {
-            Home(navController)
+            Home(viewModel, navController)
         }
         composable(Screen.WatchList.route) {
             Watchlist()
@@ -29,7 +29,7 @@ fun Navigation(navController: NavController, pd: PaddingValues) {
         composable(Screen.Search.route + "/{searchInput}") {
             backStackEntry ->
                 val searchInput = backStackEntry.arguments?.getString("searchInput") ?: ""
-                Search(searchInput)
+                Search(viewModel, searchInput)
         }
     }
 }
