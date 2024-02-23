@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.showtracker.MainViewModel
 import com.example.showtracker.fonts.Typography
+import com.example.showtracker.model.TVShowShort
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
@@ -62,6 +63,14 @@ fun SearchPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             val viewModel: MainViewModel = viewModel()
+            viewModel.setMockTVShowLists(
+                listOf(
+                    TVShowShort(1, "TV Show 1", null, null, 5f, 3),
+                    TVShowShort(2, "TV Show 2", null, null, 5f, 3),
+                    TVShowShort(3, "TV Show 3", null, null, 5f, 3)
+                )
+            )
+
             Search(viewModel, "")
         }
     }
