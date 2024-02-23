@@ -53,7 +53,7 @@ import androidx.compose.ui.unit.sp
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.DummyShow
-import com.example.showtracker.model.Episode
+import com.example.showtracker.model.EpisodeTV
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -320,7 +320,7 @@ fun Show() {
 
 @Composable
 fun EpisodeItem(
-    episode: Episode,
+    episode: EpisodeTV,
     width: Dp,
     isFirstEpisode: Boolean
 ) {
