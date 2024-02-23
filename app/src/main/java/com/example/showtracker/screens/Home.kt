@@ -131,7 +131,7 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
                                     modifier = Modifier
                                         .size(width = screenWidth / 1.6f, height = screenWidth / 3f)
                                         .padding(end = 12.dp)
-                                        .clickable { controller.navigate(Screen.Show.route) }
+                                        //.clickable { controller.navigate(Screen.Show.route) }
                                 ) {
                                     Box(
                                         Modifier.fillMaxSize()
@@ -177,7 +177,9 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
                                         else painterResource(id = R.drawable.no_image)
                         ElevatedCard(
                             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-                            modifier = Modifier.size(width = screenWidth / 2.5f, height = screenWidth / 1.6f)
+                            modifier = Modifier
+                                .size(width = screenWidth / 2.5f, height = screenWidth / 1.6f)
+                                .clickable { controller.navigate(Screen.Show.route + "/${recommended.id}") }
                         ) {
                             Image(
                                 painter = painter,

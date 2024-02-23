@@ -34,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,17 +51,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
+import com.example.showtracker.MainViewModel
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.DummyShow
 import com.example.showtracker.model.EpisodeTV
+import com.example.showtracker.model.TVShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Show() {
+fun Show(viewModel: MainViewModel, controller: NavController) {
     val screenHeight = with(LocalDensity.current) { LocalConfiguration.current.screenHeightDp.dp }
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
+
+    val navBackStackEntry by controller.currentBackStackEntryAsState()
+    val id = navBackStackEntry?.arguments?.getString("id")?.toInt()?: -1
+
+    viewModel.fetchTVShow(id)
+    val tvShowState by viewModel.tvShowState
+
+    val baseImageUrl = "https://image.tmdb.org/t/p/original"
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -68,9 +84,11 @@ fun Show() {
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
+            val painter = if (tvShowState.show.backdrop_path != null) rememberAsyncImagePainter(baseImageUrl + tvShowState.show.backdrop_path)
+                            else painterResource(id = R.drawable.no_image_backdrop)
             Image(
-                painter = painterResource(id = R.drawable.bojack_horseman),
-                contentDescription = "Cover",
+                painter = painter,
+                contentDescription = tvShowState.show.name + " cover",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,7 +107,7 @@ fun Show() {
                 modifier = Modifier.padding(end = 16.dp)
             ) {
                 Text(
-                    text = "Bojack Horseman",
+                    text = tvShowState.show.name,
                     color = Color.White,
                     fontFamily = Typography.openSans,
                     fontWeight = FontWeight.Bold,
@@ -401,7 +419,12 @@ fun ShowPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Show()
+            val viewModel: MainViewModel = viewModel()
+            viewModel.setMockTVShow(
+                TVShow(0, "TV Show", "Overview show", 70, 5, "2014-01-01", "2020-01-01", null, null, 10f, 10)
+            )
+            val controller = rememberNavController()
+            Show(viewModel, controller)
         }
     }
 }
