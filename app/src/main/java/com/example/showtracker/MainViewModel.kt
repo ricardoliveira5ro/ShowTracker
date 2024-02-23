@@ -67,6 +67,11 @@ class MainViewModel:ViewModel() {
         }
     }
 
+    fun setMockTVShowLists(mockTVShows: List<TVShowShort>) {
+        _tvShowListState.value = TVShowListState(list = mockTVShows)
+        _tvShowSearchState.value = TVShowListState(list = mockTVShows)
+    }
+
     data class TVShowListState(
         val list: List<TVShowShort> = emptyList(),
         val error: String? = null
