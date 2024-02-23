@@ -148,8 +148,8 @@ fun NothingToShowItem() {
 @Composable
 fun ShowListPreview() {
     val showList = listOf(
-        TVShowShort(1, "Bojack", "", "", 5f, 3),
-        TVShowShort(2, "Bojack", "", "", 5f, 3)
+        TVShowShort(1, "Bojack", null, "", 5f, 3),
+        TVShowShort(2, "Bojack", null, "", 5f, 3)
     )
     ShowTrackerTheme {
         Surface(
