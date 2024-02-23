@@ -36,7 +36,7 @@ class MainViewModel:ViewModel() {
                 val response = apiService.getTopRatedTVShows()
                 Log.d("MainViewModel", "Response: $response")
                 _tvShowListState.value = _tvShowListState.value.copy(
-                    list = response.results,
+                    list = response.results.sortedByDescending { it.vote_count },
                     error = null
                 )
 
@@ -54,7 +54,7 @@ class MainViewModel:ViewModel() {
             try {
                 val response = apiService.getTVShowsBySearch(query)
                 _tvShowSearchState.value = _tvShowSearchState.value.copy(
-                    list = response.results,
+                    list = response.results.sortedByDescending { it.vote_count },
                     error = null
                 )
 
