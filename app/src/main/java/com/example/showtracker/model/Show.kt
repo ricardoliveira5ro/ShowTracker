@@ -10,10 +10,10 @@ data class Show (
     val rating: Float,
     val time: Int,
     val seasons: Int,
-    val episodes: List<Episode>,
+    val episodes: List<EpisodeTV>,
 )
 
-data class Episode (
+data class EpisodeTV (
     val id: Long = 0L,
     val title: String = "",
     val number: Int,
@@ -23,30 +23,30 @@ data class Episode (
 
 object DummyShow {
     private val episodes = listOf(
-        Episode(title = "The BoJack Horseman Story", number = 1, season = 1, watched = true),
-        Episode(title = "BoJack Hates the Troops", number = 2, season = 1, watched = true),
-        Episode(title = "Prickly-Muffin", number = 3, season = 1, watched = true),
-        Episode(title = "Zoës and Zeldas", number = 4, season = 1),
-        Episode(title = "Live Fast, Diane Nguyen", number = 5, season = 1),
+        EpisodeTV(title = "The BoJack Horseman Story", number = 1, season = 1, watched = true),
+        EpisodeTV(title = "BoJack Hates the Troops", number = 2, season = 1, watched = true),
+        EpisodeTV(title = "Prickly-Muffin", number = 3, season = 1, watched = true),
+        EpisodeTV(title = "Zoës and Zeldas", number = 4, season = 1),
+        EpisodeTV(title = "Live Fast, Diane Nguyen", number = 5, season = 1),
 
-        Episode(title = "The BoJack Horseman Story", number = 1, season = 2),
-        Episode(title = "BoJack Hates the Troops", number = 2, season = 2),
-        Episode(title = "Prickly-Muffin", number = 3, season = 2),
-        Episode(title = "Zoës and Zeldas", number = 4, season = 2),
-        Episode(title = "Live Fast, Diane Nguyen", number = 5, season = 2),
-        Episode(title = "Zoës and Zeldas", number = 6, season = 2),
-        Episode(title = "Live Fast, Diane Nguyen", number = 7, season = 2),
+        EpisodeTV(title = "The BoJack Horseman Story", number = 1, season = 2),
+        EpisodeTV(title = "BoJack Hates the Troops", number = 2, season = 2),
+        EpisodeTV(title = "Prickly-Muffin", number = 3, season = 2),
+        EpisodeTV(title = "Zoës and Zeldas", number = 4, season = 2),
+        EpisodeTV(title = "Live Fast, Diane Nguyen", number = 5, season = 2),
+        EpisodeTV(title = "Zoës and Zeldas", number = 6, season = 2),
+        EpisodeTV(title = "Live Fast, Diane Nguyen", number = 7, season = 2),
 
-        Episode(title = "The BoJack Horseman Story", number = 1, season = 3),
-        Episode(title = "BoJack Hates the Troops", number = 2, season = 3),
-        Episode(title = "Prickly-Muffin", number = 3, season = 3),
-        Episode(title = "Zoës and Zeldas", number = 4, season = 3),
-        Episode(title = "Live Fast, Diane Nguyen", number = 5, season = 3),
-        Episode(title = "The BoJack Horseman Story", number = 6, season = 3),
-        Episode(title = "BoJack Hates the Troops", number = 7, season = 3),
-        Episode(title = "Prickly-Muffin", number = 8, season = 3),
-        Episode(title = "Zoës and Zeldas", number = 9, season = 3),
-        Episode(title = "Live Fast, Diane Nguyen", number = 10, season = 3)
+        EpisodeTV(title = "The BoJack Horseman Story", number = 1, season = 3),
+        EpisodeTV(title = "BoJack Hates the Troops", number = 2, season = 3),
+        EpisodeTV(title = "Prickly-Muffin", number = 3, season = 3),
+        EpisodeTV(title = "Zoës and Zeldas", number = 4, season = 3),
+        EpisodeTV(title = "Live Fast, Diane Nguyen", number = 5, season = 3),
+        EpisodeTV(title = "The BoJack Horseman Story", number = 6, season = 3),
+        EpisodeTV(title = "BoJack Hates the Troops", number = 7, season = 3),
+        EpisodeTV(title = "Prickly-Muffin", number = 8, season = 3),
+        EpisodeTV(title = "Zoës and Zeldas", number = 9, season = 3),
+        EpisodeTV(title = "Live Fast, Diane Nguyen", number = 10, season = 3)
     )
 
     val shows = listOf(

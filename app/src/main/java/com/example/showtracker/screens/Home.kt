@@ -47,6 +47,7 @@ import com.example.showtracker.fonts.Typography.nexaFont
 import com.example.showtracker.fonts.Typography.robotoFont
 import com.example.showtracker.fonts.Typography.openSans
 import com.example.showtracker.model.DummyShow
+import com.example.showtracker.model.TVShowShort
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
@@ -130,7 +131,7 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
                                     modifier = Modifier
                                         .size(width = screenWidth / 1.6f, height = screenWidth / 3f)
                                         .padding(end = 12.dp)
-                                        .clickable { controller.navigate(Screen.Show.route) }
+                                        //.clickable { controller.navigate(Screen.Show.route) }
                                 ) {
                                     Box(
                                         Modifier.fillMaxSize()
@@ -172,12 +173,16 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     items(recommended) { recommended ->
+                        val painter = if (recommended.poster_path != null) rememberAsyncImagePainter(baseImageUrl + recommended.poster_path)
+                                        else painterResource(id = R.drawable.no_image)
                         ElevatedCard(
                             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-                            modifier = Modifier.size(width = screenWidth / 2.5f, height = screenWidth / 1.6f)
+                            modifier = Modifier
+                                .size(width = screenWidth / 2.5f, height = screenWidth / 1.6f)
+                                .clickable { controller.navigate(Screen.Show.route + "/${recommended.id}") }
                         ) {
                             Image(
-                                painter = rememberAsyncImagePainter(baseImageUrl + recommended.poster_path),
+                                painter = painter,
                                 contentDescription = recommended.name,
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop
@@ -198,6 +203,14 @@ fun HomePreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             val viewModel: MainViewModel = viewModel()
+            viewModel.setMockTVShowLists(
+                listOf(
+                    TVShowShort(1, "TV Show 1", null, null, 5f, 3),
+                    TVShowShort(2, "TV Show 2", null, null, 5f, 3),
+                    TVShowShort(3, "TV Show 3", null, null, 5f, 3),
+                    TVShowShort(4, "TV Show 4", null, null, 5f, 3)
+                )
+            )
             val controller = rememberNavController()
             Home(viewModel, controller)
         }

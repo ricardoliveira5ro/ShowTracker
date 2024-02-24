@@ -23,8 +23,8 @@ fun Navigation(viewModel: MainViewModel, navController: NavController, pd: Paddi
         composable(Screen.WatchList.route) {
             Watchlist()
         }
-        composable(Screen.Show.route) {
-            Show()
+        composable(Screen.Show.route + "/{id}") {
+            Show(viewModel, navController)
         }
         composable(Screen.Search.route + "/{searchInput}") {
             backStackEntry ->

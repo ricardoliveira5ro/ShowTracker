@@ -6,6 +6,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.showtracker.model.TVShow
 import com.example.showtracker.model.TVShowShort
 import kotlinx.coroutines.launch
 
@@ -17,6 +18,9 @@ class MainViewModel:ViewModel() {
 
     private val _tvShowSearchState = mutableStateOf(TVShowListState())
     val tvShowSearchState: State<TVShowListState> = _tvShowSearchState
+
+    private val _tvShowState = mutableStateOf(TVShowState())
+    val tvShowState: State<TVShowState> = _tvShowState
 
     init {
         fetchTVShowList()
@@ -67,13 +71,38 @@ class MainViewModel:ViewModel() {
         }
     }
 
+    fun fetchTVShow(id: Int) {
+        viewModelScope.launch {
+            try {
+                val response = apiService.getTVShowById(id)
+                _tvShowState.value = _tvShowState.value.copy(
+                    show = response
+                )
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Error fetching TV Show with id $id: ${e.message}", e)
+                _tvShowState.value = _tvShowState.value.copy(
+                    error = "Error fetching TV Show with id $id ${e.message}"
+                )
+            }
+        }
+    }
+
     fun setMockTVShowLists(mockTVShows: List<TVShowShort>) {
         _tvShowListState.value = TVShowListState(list = mockTVShows)
         _tvShowSearchState.value = TVShowListState(list = mockTVShows)
     }
 
+    fun setMockTVShow(show: TVShow) {
+        _tvShowState.value = TVShowState(show = show)
+    }
+
     data class TVShowListState(
         val list: List<TVShowShort> = emptyList(),
+        val error: String? = null
+    )
+
+    data class TVShowState(
+        val show: TVShow = TVShow(-1, "", "", -1, -1, "", "", null, null, -1f, -1),
         val error: String? = null
     )
 }
