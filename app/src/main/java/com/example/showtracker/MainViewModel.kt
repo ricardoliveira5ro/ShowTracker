@@ -72,17 +72,19 @@ class MainViewModel:ViewModel() {
     }
 
     fun fetchTVShow(id: Int) {
-        viewModelScope.launch {
-            try {
-                val response = apiService.getTVShowById(id)
-                _tvShowState.value = _tvShowState.value.copy(
-                    show = response
-                )
-            } catch (e: Exception) {
-                Log.e("MainViewModel", "Error fetching TV Show with id $id: ${e.message}", e)
-                _tvShowState.value = _tvShowState.value.copy(
-                    error = "Error fetching TV Show with id $id ${e.message}"
-                )
+        if (id != -1) {
+            viewModelScope.launch {
+                try {
+                    val response = apiService.getTVShowById(id)
+                    _tvShowState.value = _tvShowState.value.copy(
+                        show = response
+                    )
+                } catch (e: Exception) {
+                    Log.e("MainViewModel", "Error fetching TV Show with id $id: ${e.message}", e)
+                    _tvShowState.value = _tvShowState.value.copy(
+                        error = "Error fetching TV Show with id $id ${e.message}"
+                    )
+                }
             }
         }
     }
@@ -102,7 +104,7 @@ class MainViewModel:ViewModel() {
     )
 
     data class TVShowState(
-        val show: TVShow = TVShow(-1, "", "", -1, -1, "", "", null, null, -1f, -1),
+        val show: TVShow = TVShow(-1, "", "", -1, -1, "", "", null, null, -1f, -1, emptyList(), emptyList()),
         val error: String? = null
     )
 }
