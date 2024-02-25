@@ -1,5 +1,6 @@
 package com.example.showtracker
 
+import com.example.showtracker.model.EpisodesResponse
 import com.example.showtracker.model.TVShow
 import com.example.showtracker.model.TVShowsShortResponse
 import retrofit2.Retrofit
@@ -35,4 +36,11 @@ interface APIService {
         @Path("series_id") tvId: Int,
         @Query("api_key") apiKey: String = BuildConfig.tmdbKey
     ):TVShow
+
+    @GET("tv/{series_id}/season/{season_number}")
+    suspend fun getEpisodesBySeason(
+        @Path("series_id") tvId: Int,
+        @Path("season_number") seasonNumber: Int,
+        @Query("api_key") apiKey: String = BuildConfig.tmdbKey
+    ):EpisodesResponse
 }
