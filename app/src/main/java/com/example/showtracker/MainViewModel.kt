@@ -6,6 +6,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.showtracker.model.Episode
 import com.example.showtracker.model.TVShow
 import com.example.showtracker.model.TVShowShort
 import kotlinx.coroutines.launch
@@ -76,9 +77,17 @@ class MainViewModel:ViewModel() {
             viewModelScope.launch {
                 try {
                     val response = apiService.getTVShowById(id)
+
+                    val episodesList = mutableListOf<Episode>()
+                    for(seasonNumber in 1..response.number_of_seasons) {
+                        episodesList.addAll(apiService.getEpisodesBySeason(id, seasonNumber).episodes)
+                    }
+
+                    val show = response.copy(episodes = episodesList)
                     _tvShowState.value = _tvShowState.value.copy(
-                        show = response
+                        show = show
                     )
+
                 } catch (e: Exception) {
                     Log.e("MainViewModel", "Error fetching TV Show with id $id: ${e.message}", e)
                     _tvShowState.value = _tvShowState.value.copy(
@@ -104,7 +113,7 @@ class MainViewModel:ViewModel() {
     )
 
     data class TVShowState(
-        val show: TVShow = TVShow(-1, "", "", -1, -1, "", "", null, null, -1f, -1, emptyList(), emptyList()),
+        val show: TVShow = TVShow(-1, "", "", -1, -1, "", "", null, null, -1f, -1, emptyList(), emptyList(), emptyList()),
         val error: String? = null
     )
 }

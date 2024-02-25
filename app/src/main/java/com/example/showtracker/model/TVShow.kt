@@ -13,7 +13,8 @@ data class TVShow(
     val vote_average: Float,
     val vote_count: Int,
     val genres: List<Genre>,
-    val seasons: List<Season>
+    val seasons: List<Season>,
+    val episodes: List<Episode>
 )
 
 data class TVShowShort(

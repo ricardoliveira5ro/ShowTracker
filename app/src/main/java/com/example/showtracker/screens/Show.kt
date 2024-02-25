@@ -60,6 +60,7 @@ import com.example.showtracker.MainViewModel
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.DummyShow
+import com.example.showtracker.model.Episode
 import com.example.showtracker.model.EpisodeTV
 import com.example.showtracker.model.Genre
 import com.example.showtracker.model.Season
@@ -436,7 +437,8 @@ fun ShowPreview() {
                     10f,
                     10,
                     listOf(Genre(1, "Drama"), Genre(2, "Comedy")),
-                    listOf(Season(1, 1, 5), Season(2, 2, 7), Season(3, 3, 10))
+                    listOf(Season(1, 1, 5), Season(2, 2, 7), Season(3, 3, 10)),
+                    listOf(Episode(1, "Nada", 1, 1))
                 )
             )
             val controller = rememberNavController()
