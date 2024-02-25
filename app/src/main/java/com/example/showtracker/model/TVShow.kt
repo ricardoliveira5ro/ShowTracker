@@ -11,7 +11,9 @@ data class TVShow(
     val poster_path: String?,
     val backdrop_path: String?,
     val vote_average: Float,
-    val vote_count: Int
+    val vote_count: Int,
+    val genres: List<Genre>,
+    val seasons: List<Season>
 )
 
 data class TVShowShort(

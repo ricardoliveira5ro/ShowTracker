@@ -61,6 +61,8 @@ import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.DummyShow
 import com.example.showtracker.model.EpisodeTV
+import com.example.showtracker.model.Genre
+import com.example.showtracker.model.Season
 import com.example.showtracker.model.TVShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
@@ -167,7 +169,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
                 LazyRow(
                     modifier = Modifier.padding(end = 4.dp)
                 ) {
-                    items(DummyShow.genres) {
+                    items(tvShowState.show.genres) {
                         genre ->
                             Box(
                                 modifier = Modifier
@@ -180,7 +182,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
                                     ),
                             ) {
                                 Text(
-                                    text = genre,
+                                    text = genre.name,
                                     color = Color.White,
                                     fontFamily = Typography.openSans,
                                     fontWeight = FontWeight.SemiBold,
@@ -421,7 +423,21 @@ fun ShowPreview() {
         ) {
             val viewModel: MainViewModel = viewModel()
             viewModel.setMockTVShow(
-                TVShow(0, "TV Show", "Overview show", 70, 5, "2014-01-01", "2020-01-01", null, null, 10f, 10)
+                TVShow(
+                    0,
+                    "TV Show",
+                    "Overview show",
+                    70,
+                    5,
+                    "2014-01-01",
+                    "2020-01-01",
+                    null,
+                    null,
+                    10f,
+                    10,
+                    listOf(Genre(1, "Drama"), Genre(2, "Comedy")),
+                    listOf(Season(1, 1, 5), Season(2, 2, 7), Season(3, 3, 10))
+                )
             )
             val controller = rememberNavController()
             Show(viewModel, controller)
