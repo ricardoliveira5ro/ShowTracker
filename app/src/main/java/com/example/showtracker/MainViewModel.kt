@@ -78,6 +78,13 @@ class MainViewModel:ViewModel() {
                 try {
                     val response = apiService.getTVShowById(id)
 
+                    // Send Specials season to end of list
+                    val seasons = response.seasons.toMutableList()
+                    seasons.removeAll { it.season_number == 0 }
+                    val seasonSpecials = response.seasons.find { it.season_number == 0 }
+                    if (seasonSpecials != null) seasons.add(seasonSpecials)
+
+
                     val episodesList = mutableListOf<Episode>()
                     for(seasonNumber in 1..response.number_of_seasons) {
                         episodesList.addAll(apiService.getEpisodesBySeason(id, seasonNumber).episodes)
@@ -88,7 +95,7 @@ class MainViewModel:ViewModel() {
                         episodesList.addAll(apiService.getEpisodesBySeason(id, 0).episodes)
                     }
 
-                    val show = response.copy(episodes = episodesList)
+                    val show = response.copy(seasons = seasons, episodes = episodesList)
                     _tvShowState.value = _tvShowState.value.copy(
                         show = show
                     )
