@@ -80,7 +80,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
     val baseImageUrl = "https://image.tmdb.org/t/p/original"
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
     ) {
         Row(
             modifier = Modifier.fillMaxWidth()
