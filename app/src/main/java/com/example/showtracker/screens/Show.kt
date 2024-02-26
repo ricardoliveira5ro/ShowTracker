@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -76,99 +77,109 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
 
     viewModel.fetchTVShow(id)
     val tvShowState by viewModel.tvShowState
+    
+    if(tvShowState.show.id != -1) {
+        Text(text = "HERE")
+    }
 
     val baseImageUrl = "https://image.tmdb.org/t/p/original"
 
-    Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            val painter = if (tvShowState.show.backdrop_path != null) rememberAsyncImagePainter(baseImageUrl + tvShowState.show.backdrop_path)
-                            else painterResource(id = R.drawable.no_image_backdrop)
-            Image(
-                painter = painter,
-                contentDescription = tvShowState.show.name + " cover",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(screenHeight / 3.5f)
-            )
-        }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 18.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                modifier = Modifier.padding(end = 16.dp)
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = tvShowState.show.name,
-                    color = Color.White,
-                    fontFamily = Typography.openSans,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-
-                Spacer(modifier = Modifier.padding(vertical = 2.dp))
-
-                Text(
-                    text = "${viewModel.getYear(tvShowState.show.first_air_date)} - ${viewModel.getYear(tvShowState.show.last_air_date)}",
-                    color = colorResource(id = R.color.blue_font_1),
-                    fontFamily = Typography.robotoFont,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp
+                val painter = if (tvShowState.show.backdrop_path != null) rememberAsyncImagePainter(baseImageUrl + tvShowState.show.backdrop_path)
+                                else painterResource(id = R.drawable.no_image_backdrop)
+                Image(
+                    painter = painter,
+                    contentDescription = tvShowState.show.name + " cover",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(screenHeight / 3.5f)
                 )
             }
+        }
 
-            Column {
-                val icon = if (tvShowState.show.watchlist) R.drawable.added else R.drawable.add
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 18.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
+                    modifier = Modifier.padding(end = 16.dp)
+                ) {
+                    Text(
+                        text = tvShowState.show.name,
+                        color = Color.White,
+                        fontFamily = Typography.openSans,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
 
-                IconButton(onClick = {  }) {
-                    Image(painter = painterResource(id = icon), contentDescription = "Add/Remove to/from Watchlist")
+                    Spacer(modifier = Modifier.padding(vertical = 2.dp))
+
+                    Text(
+                        text = "${viewModel.getYear(tvShowState.show.first_air_date)} - ${viewModel.getYear(tvShowState.show.last_air_date)}",
+                        color = colorResource(id = R.color.blue_font_1),
+                        fontFamily = Typography.robotoFont,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 14.sp
+                    )
+                }
+
+                Column {
+                    val icon = if (tvShowState.show.watchlist) R.drawable.added else R.drawable.add
+
+                    IconButton(onClick = {  }) {
+                        Image(painter = painterResource(id = icon), contentDescription = "Add/Remove to/from Watchlist")
+                    }
                 }
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
+        item {
             Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(end = 16.dp)
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(
-                    imageVector = Icons.Rounded.Star,
-                    contentDescription = "Rating",
-                    tint = Color.Yellow,
-                    modifier = Modifier.size(18.dp)
-                )
-                Text(
-                    text = viewModel.getRating(tvShowState.show.vote_average),
-                    color = Color.White,
-                    fontFamily = Typography.openSans,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(start = 4.dp)
-                )
-            }
-
-
-            Row {
-                LazyRow(
-                    modifier = Modifier.padding(end = 4.dp)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(end = 16.dp)
                 ) {
-                    items(tvShowState.show.genres) {
-                        genre ->
+                    Icon(
+                        imageVector = Icons.Rounded.Star,
+                        contentDescription = "Rating",
+                        tint = Color.Yellow,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Text(
+                        text = viewModel.getRating(tvShowState.show.vote_average),
+                        color = Color.White,
+                        fontFamily = Typography.openSans,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+
+
+                Row {
+                    LazyRow(
+                        modifier = Modifier.padding(end = 4.dp)
+                    ) {
+                        items(tvShowState.show.genres) {
+                                genre ->
                             Box(
                                 modifier = Modifier
                                     .padding(end = 5.dp)
@@ -188,82 +199,95 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
                                     modifier = Modifier.padding(8.dp, 4.dp)
                                 )
                             }
+                        }
                     }
                 }
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 16.dp)
-        ) {
-            Text(
-                text = tvShowState.show.overview,
-                textAlign = TextAlign.Justify,
-                color = Color.White,
-                fontFamily = Typography.robotoFont,
-                fontWeight = FontWeight.Light,
-                fontSize = 13.sp,
+
+        item {
+            Row(
                 modifier = Modifier
-                    .height(58.dp)
-                    .verticalScroll(rememberScrollState())
-            )
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 6.dp)
-        ) {
-            Text(
-                text = "Your next episode",
-                color = Color.White,
-                fontFamily = Typography.openSans,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-        }
-
-        val numberOfPages = tvShowState.show.episodes.size
-        val nextEpisodeIndex = tvShowState.show.episodes.indexOfFirst { !it.isWatched }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 6.dp)
-        ) {
-            val state = rememberPagerState (
-                initialPage = if (nextEpisodeIndex != -1) nextEpisodeIndex else 0,
-                pageCount = { numberOfPages }
-            )
-            HorizontalPager(
-                state = state,
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = if (state.currentPage == 0) PaddingValues(end = 42.dp) else PaddingValues(horizontal = 32.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
-                page ->
-                    EpisodeItem(episode = tvShowState.show.episodes[page], imageEpisodeUrl = tvShowState.show.poster_path, width = screenWidth, isFirstEpisode = state.currentPage == 0)
+                Text(
+                    text = tvShowState.show.overview,
+                    textAlign = TextAlign.Justify,
+                    color = Color.White,
+                    fontFamily = Typography.robotoFont,
+                    fontWeight = FontWeight.Light,
+                    fontSize = 13.sp,
+                    modifier = Modifier
+                        .height(58.dp)
+                        .verticalScroll(rememberScrollState())
+                )
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 16.dp)
-        ) {
-            Text(
-                text = "Seasons",
-                color = Color.White,
-                fontFamily = Typography.openSans,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
+
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 6.dp)
+            ) {
+                Text(
+                    text = "Your next episode",
+                    color = Color.White,
+                    fontFamily = Typography.openSans,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
         }
 
-        repeat(tvShowState.show.number_of_seasons) {
-            seasonIndex ->
-                val seasonEpisodes = tvShowState.show.episodes.filter { it.season_number == seasonIndex }
+
+        item {
+            val numberOfPages = tvShowState.show.episodes.size
+            val nextEpisodeIndex = tvShowState.show.episodes.indexOfFirst { !it.isWatched }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 6.dp)
+            ) {
+                val state = rememberPagerState (
+                    initialPage = if (nextEpisodeIndex != -1) nextEpisodeIndex else 0,
+                    pageCount = { numberOfPages }
+                )
+                HorizontalPager(
+                    state = state,
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = if (state.currentPage == 0) PaddingValues(end = 42.dp) else PaddingValues(horizontal = 32.dp)
+                ) {
+                        page ->
+                    EpisodeItem(episode = tvShowState.show.episodes[page], imageEpisodeUrl = tvShowState.show.poster_path, width = screenWidth, isFirstEpisode = state.currentPage == 0)
+                }
+            }
+        }
+
+
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
+            ) {
+                Text(
+                    text = "Seasons",
+                    color = Color.White,
+                    fontFamily = Typography.openSans,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
+        }
+
+        items(tvShowState.show.seasons) {
+            season ->
+                val seasonEpisodes = tvShowState.show.episodes.filter { it.season_number == season.season_number }
                 val seasonEpisodesWatched = seasonEpisodes.count { it.isWatched }
 
                 val progress = (seasonEpisodesWatched.toFloat() / seasonEpisodes.size.toFloat()) * 100
@@ -271,7 +295,8 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp).padding(bottom = 18.dp),
+                        .padding(horizontal = 24.dp)
+                        .padding(bottom = 18.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -279,7 +304,9 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
                         Image(
                             painter = painterResource(id = R.drawable.play),
                             contentDescription = "Play Icon",
-                            modifier = Modifier.size(32.dp).padding(top = 4.dp)
+                            modifier = Modifier
+                                .size(32.dp)
+                                .padding(top = 4.dp)
                         )
                     }
 
@@ -291,7 +318,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
                         Row(
                         ) {
                             val seasonName = if(seasonEpisodes.firstOrNull()?.season_number == 0) "Specials"
-                                                else "Season ${seasonEpisodes.firstOrNull()?.season_number}"
+                            else "Season ${seasonEpisodes.firstOrNull()?.season_number}"
                             Text(
                                 text = seasonName,
                                 color = Color.White,
