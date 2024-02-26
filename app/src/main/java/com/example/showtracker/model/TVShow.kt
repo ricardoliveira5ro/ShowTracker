@@ -14,7 +14,8 @@ data class TVShow(
     val vote_count: Int,
     val genres: List<Genre>,
     val seasons: List<Season>,
-    val episodes: List<Episode>
+    val episodes: List<Episode>,
+    val watchlist: Boolean = false
 )
 
 data class TVShowShort(

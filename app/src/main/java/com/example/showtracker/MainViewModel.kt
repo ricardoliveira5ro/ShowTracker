@@ -83,6 +83,11 @@ class MainViewModel:ViewModel() {
                         episodesList.addAll(apiService.getEpisodesBySeason(id, seasonNumber).episodes)
                     }
 
+                    // Get and send Specials episodes to end of list
+                    if (response.seasons.find { it.season_number == 0 } != null) {
+                        episodesList.addAll(apiService.getEpisodesBySeason(id, 0).episodes)
+                    }
+
                     val show = response.copy(episodes = episodesList)
                     _tvShowState.value = _tvShowState.value.copy(
                         show = show
@@ -96,6 +101,14 @@ class MainViewModel:ViewModel() {
                 }
             }
         }
+    }
+
+    fun getYear(date: String): String {
+        return date.split('-')[0]
+    }
+
+    fun getRating(rating: Float): String {
+        return String.format("%.1f", (rating / 2))
     }
 
     fun setMockTVShowLists(mockTVShows: List<TVShowShort>) {

@@ -59,9 +59,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.showtracker.MainViewModel
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
-import com.example.showtracker.model.DummyShow
 import com.example.showtracker.model.Episode
-import com.example.showtracker.model.EpisodeTV
 import com.example.showtracker.model.Genre
 import com.example.showtracker.model.Season
 import com.example.showtracker.model.TVShow
@@ -120,7 +118,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
                 Spacer(modifier = Modifier.padding(vertical = 2.dp))
 
                 Text(
-                    text = "2019 - 2022",
+                    text = "${viewModel.getYear(tvShowState.show.first_air_date)} - ${viewModel.getYear(tvShowState.show.last_air_date)}",
                     color = colorResource(id = R.color.blue_font_1),
                     fontFamily = Typography.robotoFont,
                     fontWeight = FontWeight.Medium,
@@ -129,11 +127,10 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
             }
 
             Column {
-                val added = true
-                val icon = if (added) R.drawable.added else R.drawable.add
+                val icon = if (tvShowState.show.watchlist) R.drawable.added else R.drawable.add
 
                 IconButton(onClick = {  }) {
-                    Image(painter = painterResource(id = icon), contentDescription = "Add to Watchlist")
+                    Image(painter = painterResource(id = icon), contentDescription = "Add/Remove to/from Watchlist")
                 }
             }
         }
@@ -156,7 +153,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
                     modifier = Modifier.size(18.dp)
                 )
                 Text(
-                    text = "4.6",
+                    text = viewModel.getRating(tvShowState.show.vote_average),
                     color = Color.White,
                     fontFamily = Typography.openSans,
                     fontWeight = FontWeight.Bold,
@@ -202,7 +199,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Text(
-                text = "Meet the most beloved sitcom horse of the 90s - 20 years later. BoJack Horseman was the star of the hit TV show \"Horsin' Around,\" but today he's washed up, living in Hollywood, complaining about everything, and wearing colorful sweaters.",
+                text = tvShowState.show.overview,
                 textAlign = TextAlign.Justify,
                 color = Color.White,
                 fontFamily = Typography.robotoFont,
@@ -228,9 +225,8 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
             )
         }
 
-        val show = DummyShow.shows.first()
-        val numberOfPages = show.episodes.size
-        val nextEpisodeIndex = show.episodes.indexOfFirst { !it.watched }
+        val numberOfPages = tvShowState.show.episodes.size
+        val nextEpisodeIndex = tvShowState.show.episodes.indexOfFirst { !it.isWatched }
 
         Row(
             modifier = Modifier
@@ -247,7 +243,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
                 contentPadding = if (state.currentPage == 0) PaddingValues(end = 42.dp) else PaddingValues(horizontal = 32.dp)
             ) {
                 page ->
-                    EpisodeItem(episode = show.episodes[page], screenWidth, state.currentPage == 0)
+                    EpisodeItem(episode = tvShowState.show.episodes[page], imageEpisodeUrl = tvShowState.show.poster_path, width = screenWidth, isFirstEpisode = state.currentPage == 0)
             }
         }
 
@@ -265,10 +261,10 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
             )
         }
 
-        repeat(show.seasons) {
+        repeat(tvShowState.show.number_of_seasons) {
             seasonIndex ->
-                val seasonEpisodes = show.episodes.filter { it.season == seasonIndex + 1 }
-                val seasonEpisodesWatched = seasonEpisodes.count { it.watched }
+                val seasonEpisodes = tvShowState.show.episodes.filter { it.season_number == seasonIndex }
+                val seasonEpisodesWatched = seasonEpisodes.count { it.isWatched }
 
                 val progress = (seasonEpisodesWatched.toFloat() / seasonEpisodes.size.toFloat()) * 100
 
@@ -294,8 +290,10 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
                     ) {
                         Row(
                         ) {
+                            val seasonName = if(seasonEpisodes.firstOrNull()?.season_number == 0) "Specials"
+                                                else "Season ${seasonEpisodes.firstOrNull()?.season_number}"
                             Text(
-                                text = "Season ${seasonIndex + 1}",
+                                text = seasonName,
                                 color = Color.White,
                                 fontFamily = Typography.robotoFont,
                                 fontWeight = FontWeight.Light,
@@ -341,7 +339,8 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
 
 @Composable
 fun EpisodeItem(
-    episode: EpisodeTV,
+    episode: Episode,
+    imageEpisodeUrl: String?,
     width: Dp,
     isFirstEpisode: Boolean
 ) {
@@ -363,9 +362,12 @@ fun EpisodeItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.width(80.dp)) {
+                val baseImageUrl = "https://image.tmdb.org/t/p/original"
+                val painter = if (imageEpisodeUrl != null) rememberAsyncImagePainter(baseImageUrl + imageEpisodeUrl)
+                                else painterResource(id = R.drawable.no_image)
                 Image(
-                    painter = painterResource(id = R.drawable.bojack_horseman),
-                    contentDescription = "Episode",
+                    painter = painter,
+                    contentDescription = "Episode cover",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
@@ -384,15 +386,14 @@ fun EpisodeItem(
                     verticalAlignment = Alignment.Top
                 ) {
                     Text(
-                        text = "S${episode.season.toString().padStart(2, '0')} | E${episode.number.toString().padStart(2, '0')}",
+                        text = "S${episode.season_number.toString().padStart(2, '0')} | E${episode.episode_number.toString().padStart(2, '0')}",
                         color = Color.White,
                         fontFamily = Typography.openSans,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp
                     )
 
-                    val added = false
-                    val icon = if (added) R.drawable.added else R.drawable.add
+                    val icon = if (episode.isWatched) R.drawable.added else R.drawable.add
 
                     IconButton(onClick = {  }, modifier = Modifier.size(24.dp)) {
                         Image(
@@ -403,7 +404,7 @@ fun EpisodeItem(
                 }
 
                 Text(
-                    text = episode.title,
+                    text = episode.name,
                     color = Color.White,
                     fontFamily = Typography.robotoFont,
                     fontWeight = FontWeight.Light,
@@ -427,18 +428,24 @@ fun ShowPreview() {
                 TVShow(
                     0,
                     "TV Show",
-                    "Overview show",
+                    "Temporal Nexus follows Dr. Emily Hartley, a physicist entangled in a conspiracy surrounding time travel. As she uncovers a hidden society manipulating the temporal streams, Emily must navigate moral dilemmas while racing to prevent a catastrophic rupture in the fabric of time itself.",
                     70,
-                    5,
+                    4,
                     "2014-01-01",
                     "2020-01-01",
                     null,
                     null,
-                    10f,
+                    5f,
                     10,
                     listOf(Genre(1, "Drama"), Genre(2, "Comedy")),
-                    listOf(Season(1, 1, 5), Season(2, 2, 7), Season(3, 3, 10)),
-                    listOf(Episode(1, "Nada", 1, 1))
+                    listOf(Season(1, 1, 4), Season(2, 2, 3), Season(3, 3, 3), Season(0, 0, 1)),
+                    listOf(
+                        Episode(1, "Episode 1", 1, 1, true), Episode(2, "Episode 2", 1, 2), Episode(3, "Episode 3", 1, 3), Episode(4, "Episode 4", 1, 4),
+                        Episode(5, "Episode 1", 2, 1), Episode(6, "Episode 2", 2, 2), Episode(7, "Episode 3", 2, 3),
+                        Episode(8, "Episode 1", 3, 1), Episode(9, "Episode 2", 3, 2), Episode(10, "Episode 3", 3, 3),
+                        Episode(0, "Episode 0", 0, 1),
+                        ),
+                    true
                 )
             )
             val controller = rememberNavController()
