@@ -1,5 +1,6 @@
 package com.example.showtracker.screens.showdetail
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,9 +60,15 @@ fun TitleSection(show: TVShow) {
         }
 
         Column {
-            val icon = if (show.watchlist) R.drawable.added else R.drawable.add
+            var icon by remember { mutableStateOf(if (show.watchlist) R.drawable.added else R.drawable.add) }
 
-            IconButton(onClick = {  }) {
+            IconButton(
+                onClick = {
+                    icon = if (show.watchlist) R.drawable.added else R.drawable.add
+                    show.watchlist = !show.watchlist
+                    Log.d("ShowDetail", show.watchlist.toString())
+                }
+            ) {
                 Image(painter = painterResource(id = icon), contentDescription = "Add/Remove to/from Watchlist")
             }
         }
