@@ -38,6 +38,7 @@ import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.TVShowShort
 import com.example.showtracker.screens.stars.FractionalRatingBar
 import com.example.showtracker.ui.theme.ShowTrackerTheme
+import com.example.showtracker.utils.Utils
 
 @Composable
 fun ShowList(showList: List<TVShowShort>) {
@@ -61,8 +62,7 @@ fun ShowListItem(show: TVShowShort) {
     ) {
 
         val boxWidth = this.maxWidth
-        val baseImageUrl = "https://image.tmdb.org/t/p/original"
-        val painter = if (show.poster_path != null) rememberAsyncImagePainter(baseImageUrl + show.poster_path)
+        val painter = if (show.poster_path != null) rememberAsyncImagePainter(Utils.TMDB_IMAGES_BASE_URL + show.poster_path)
         else painterResource(id = R.drawable.no_image)
 
         Card(

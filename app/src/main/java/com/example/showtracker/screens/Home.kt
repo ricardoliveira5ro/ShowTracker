@@ -47,8 +47,8 @@ import com.example.showtracker.fonts.Typography.nexaFont
 import com.example.showtracker.fonts.Typography.robotoFont
 import com.example.showtracker.fonts.Typography.openSans
 import com.example.showtracker.model.DummyShow
-import com.example.showtracker.model.TVShowShort
 import com.example.showtracker.ui.theme.ShowTrackerTheme
+import com.example.showtracker.utils.Utils
 
 @Composable
 fun Home(viewModel: MainViewModel, controller: NavController) {
@@ -56,8 +56,6 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
     var searchInput by remember { mutableStateOf("") }
 
     val tvShowListState by viewModel.tvShowListState
-
-    val baseImageUrl = "https://image.tmdb.org/t/p/original"
 
     LazyColumn(modifier = Modifier
         .fillMaxSize()
@@ -173,7 +171,7 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     items(recommended) { recommended ->
-                        val painter = if (recommended.poster_path != null) rememberAsyncImagePainter(baseImageUrl + recommended.poster_path)
+                        val painter = if (recommended.poster_path != null) rememberAsyncImagePainter(Utils.TMDB_IMAGES_BASE_URL + recommended.poster_path)
                                         else painterResource(id = R.drawable.no_image)
                         ElevatedCard(
                             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -203,14 +201,7 @@ fun HomePreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             val viewModel: MainViewModel = viewModel()
-            viewModel.setMockTVShowLists(
-                listOf(
-                    TVShowShort(1, "TV Show 1", null, null, 5f, 3),
-                    TVShowShort(2, "TV Show 2", null, null, 5f, 3),
-                    TVShowShort(3, "TV Show 3", null, null, 5f, 3),
-                    TVShowShort(4, "TV Show 4", null, null, 5f, 3)
-                )
-            )
+            viewModel.setMockTVShowLists(Utils.mockTVShowsListPreview)
             val controller = rememberNavController()
             Home(viewModel, controller)
         }

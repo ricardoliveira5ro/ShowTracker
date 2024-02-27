@@ -110,14 +110,6 @@ class MainViewModel:ViewModel() {
         }
     }
 
-    fun getYear(date: String): String {
-        return date.split('-')[0]
-    }
-
-    fun getRating(rating: Float): String {
-        return String.format("%.1f", (rating / 2))
-    }
-
     fun setMockTVShowLists(mockTVShows: List<TVShowShort>) {
         _tvShowListState.value = TVShowListState(list = mockTVShows)
         _tvShowSearchState.value = TVShowListState(list = mockTVShows)
