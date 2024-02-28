@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.showtracker.MainViewModel
 import com.example.showtracker.fonts.Typography
+import com.example.showtracker.model.TVShow
 import com.example.showtracker.screens.showdetail.BackdropImage
 import com.example.showtracker.screens.showdetail.EpisodeSlider
 import com.example.showtracker.screens.showdetail.Overview
@@ -45,6 +46,9 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
     viewModel.fetchTVShow(id)
     val tvShowState by viewModel.tvShowState
 
+    viewModel.loadTVShowFromDataStore()
+    val loadedTVShow: TVShow = viewModel.loadedTVShow.value ?: Utils.defaultTVShow
+
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -63,7 +67,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
 
 
         item {
-            Overview(show = tvShowState.show)
+                Overview(show = loadedTVShow)
         }
 
         item {

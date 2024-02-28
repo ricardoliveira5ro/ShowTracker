@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.showtracker.model.Episode
@@ -24,6 +26,9 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     private val _tvShowState = mutableStateOf(TVShowState())
     val tvShowState: State<TVShowState> = _tvShowState
 
+    private val _loadedTVShow = MutableLiveData<TVShow>()
+    val loadedTVShow: LiveData<TVShow> = _loadedTVShow
+
     init {
         fetchTVShowList()
     }
@@ -42,6 +47,14 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
                 Log.d("MainViewModel", "Save Success")
             } else {
                 // Error saving show
+            }
+        }
+    }
+
+    fun loadTVShowFromDataStore() {
+        viewModelScope.launch {
+            dataStoreHelper.loadShow().collect {
+                _loadedTVShow.value = it
             }
         }
     }
