@@ -15,7 +15,3 @@ message ShowItem {
   int32 vote_count = 9;
   bool watchlist = 10;
 }
-
-message ShowItems {
-  repeated ShowItem items = 1;
-}

@@ -1,6 +1,5 @@
 package com.example.showtracker
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,11 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
-import androidx.datastore.dataStore
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.showtracker.ui.theme.ShowTrackerTheme
-
-val Context.dataStore by dataStore("shows.pb", TVShowSerializer)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +20,8 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel: MainViewModel = viewModel()
+            val dataStoreHelper = DataStoreHelper(applicationContext)
+            val viewModel = MainViewModel(dataStoreHelper)
             ShowTrackerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(

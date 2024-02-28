@@ -22,13 +22,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.showtracker.MainViewModel
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.TVShow
 import com.example.showtracker.utils.Utils
 
 @Composable
-fun TitleSection(show: TVShow) {
+fun TitleSection(viewModel: MainViewModel, show: TVShow) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -66,7 +67,7 @@ fun TitleSection(show: TVShow) {
                     icon = if (show.watchlist) R.drawable.added else R.drawable.add
                     show.watchlist = !show.watchlist
 
-                    //viewModel.saveTVShowToWatchlist(show.copy(watchlist = !show.watchlist))
+                    viewModel.saveTVShowToDataStore(show)
                 }
             ) {
                 Image(painter = painterResource(id = icon), contentDescription = "Add/Remove to/from Watchlist")
