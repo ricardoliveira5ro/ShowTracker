@@ -8,6 +8,7 @@ import com.example.showtracker.model.TVShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 private val Context.dataStore: DataStore<ShowItem> by dataStore(
     fileName = "show_item.pb",
@@ -63,6 +64,12 @@ class DataStoreHelper(val context: Context) {
         }.catch { error ->
             Log.e("DataStoreHelper", "Error saving show: ${error.message}", error)
             emit(false)
+        }
+    }
+
+    fun loadShow(): Flow<TVShow> {
+        return context.dataStore.data.map {
+            it.toTVShow()
         }
     }
 }
