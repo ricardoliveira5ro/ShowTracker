@@ -1,6 +1,5 @@
 package com.example.showtracker.screens.showdetail
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -66,7 +65,8 @@ fun TitleSection(show: TVShow) {
                 onClick = {
                     icon = if (show.watchlist) R.drawable.added else R.drawable.add
                     show.watchlist = !show.watchlist
-                    Log.d("ShowDetail", show.watchlist.toString())
+
+                    //viewModel.saveTVShowToWatchlist(show.copy(watchlist = !show.watchlist))
                 }
             ) {
                 Image(painter = painterResource(id = icon), contentDescription = "Add/Remove to/from Watchlist")

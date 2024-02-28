@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_package = "com.example.showtracker";
+option java_multiple_files = true;
+
+message ShowItem {
+  int32 id = 1;
+  string name = 2;
+  string overview = 3;
+  string first_air_date = 4;
+  string last_air_date = 5;
+  string poster_path = 6;
+  string backdrop_path = 7;
+  float vote_average = 8;
+  int32 vote_count = 9;
+  bool watchlist = 10;
+}
+
+message ShowItems {
+  repeated ShowItem items = 1;
+}
