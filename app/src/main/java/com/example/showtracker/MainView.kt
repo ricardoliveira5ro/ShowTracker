@@ -49,8 +49,8 @@ fun MainViewPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            val viewModel = MainViewModel()
-            MainView(viewModel)
+            //val viewModel = MainViewModel()
+            //MainView(viewModel)
         }
     }
 }

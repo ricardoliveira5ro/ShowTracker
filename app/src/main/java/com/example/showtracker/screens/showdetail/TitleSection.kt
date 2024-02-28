@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,13 +22,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.showtracker.MainViewModel
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.TVShow
 import com.example.showtracker.utils.Utils
 
 @Composable
-fun TitleSection(show: TVShow) {
+fun TitleSection(viewModel: MainViewModel, show: TVShow) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,9 +60,16 @@ fun TitleSection(show: TVShow) {
         }
 
         Column {
-            val icon = if (show.watchlist) R.drawable.added else R.drawable.add
+            var icon by remember { mutableStateOf(if (show.watchlist) R.drawable.added else R.drawable.add) }
 
-            IconButton(onClick = {  }) {
+            IconButton(
+                onClick = {
+                    icon = if (show.watchlist) R.drawable.added else R.drawable.add
+                    show.watchlist = !show.watchlist
+
+                    viewModel.saveTVShowToDataStore(show)
+                }
+            ) {
                 Image(painter = painterResource(id = icon), contentDescription = "Add/Remove to/from Watchlist")
             }
         }

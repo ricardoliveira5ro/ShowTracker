@@ -9,9 +9,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.showtracker.model.Episode
 import com.example.showtracker.model.TVShow
 import com.example.showtracker.model.TVShowShort
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class MainViewModel:ViewModel() {
+class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     private val _currentScreen: MutableState<Screen> = mutableStateOf(Screen.Home)
 
     private val _tvShowListState = mutableStateOf(TVShowListState())
@@ -32,6 +33,17 @@ class MainViewModel:ViewModel() {
 
     fun setCurrentScreen(screen: Screen) {
         _currentScreen.value = screen
+    }
+
+    fun saveTVShowToDataStore(tvShow: TVShow) {
+        viewModelScope.launch {
+            val success = dataStoreHelper.saveShow(tvShow).first()
+            if (success) {
+                Log.d("MainViewModel", "Save Success")
+            } else {
+                // Error saving show
+            }
+        }
     }
 
     private fun fetchTVShowList() {

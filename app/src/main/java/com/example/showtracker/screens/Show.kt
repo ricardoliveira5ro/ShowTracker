@@ -54,7 +54,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
         }
 
         item {
-            TitleSection(show = tvShowState.show)
+            TitleSection(viewModel = viewModel, show = tvShowState.show)
         }
 
         item {

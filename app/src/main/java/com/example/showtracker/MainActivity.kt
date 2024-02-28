@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +20,8 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel: MainViewModel = viewModel()
+            val dataStoreHelper = DataStoreHelper(applicationContext)
+            val viewModel = MainViewModel(dataStoreHelper)
             ShowTrackerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
