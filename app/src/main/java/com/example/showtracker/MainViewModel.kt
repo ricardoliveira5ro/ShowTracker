@@ -40,6 +40,18 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
         _currentScreen.value = screen
     }
 
+    fun saveTVShowsToDataStore(tvShow: TVShow) {
+        val shows: List<TVShow> = listOf(tvShow, tvShow)
+        viewModelScope.launch {
+            val success = dataStoreHelper.saveShows(shows).first()
+            if (success) {
+                Log.d("MainViewModel", "Save shows success")
+            } else {
+                // Error saving show
+            }
+        }
+    }
+
     fun saveTVShowToDataStore(tvShow: TVShow) {
         viewModelScope.launch {
             val success = dataStoreHelper.saveShow(tvShow).first()

@@ -68,6 +68,7 @@ fun TitleSection(viewModel: MainViewModel, show: TVShow) {
                     show.watchlist = !show.watchlist
 
                     viewModel.saveTVShowToDataStore(show)
+                    viewModel.saveTVShowsToDataStore(show)
                 }
             ) {
                 Image(painter = painterResource(id = icon), contentDescription = "Add/Remove to/from Watchlist")

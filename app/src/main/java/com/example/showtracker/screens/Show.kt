@@ -67,7 +67,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
 
 
         item {
-                Overview(show = loadedTVShow)
+            Overview(show = loadedTVShow)
         }
 
         item {
