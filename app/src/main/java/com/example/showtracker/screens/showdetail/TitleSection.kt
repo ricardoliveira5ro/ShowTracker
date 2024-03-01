@@ -67,7 +67,6 @@ fun TitleSection(viewModel: MainViewModel, show: TVShow) {
                     icon = if (show.watchlist) R.drawable.added else R.drawable.add
                     show.watchlist = !show.watchlist
 
-                    viewModel.saveTVShowToDataStore(show)
                     viewModel.saveTVShowsToDataStore(show)
                 }
             ) {

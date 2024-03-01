@@ -1,6 +1,5 @@
 package com.example.showtracker.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +25,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.showtracker.MainViewModel
 import com.example.showtracker.fonts.Typography
-import com.example.showtracker.model.TVShow
 import com.example.showtracker.screens.showdetail.BackdropImage
 import com.example.showtracker.screens.showdetail.EpisodeSlider
 import com.example.showtracker.screens.showdetail.Overview
@@ -47,22 +45,18 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
     viewModel.fetchTVShow(id)
     val tvShowState by viewModel.tvShowState
 
-    viewModel.loadTVShowFromDataStore()
-    val loadedTVShow: TVShow = viewModel.loadedTVShow.value ?: Utils.defaultTVShow
-
-    val shows = viewModel.loadedTVShows.value ?: emptyList()
-    Log.d("Show", "$shows")
+    val show = viewModel.loadTVShowById(id)
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
 
         item {
-            BackdropImage(show = tvShowState.show, screenHeight = screenHeight)
+            BackdropImage(show = show, screenHeight = screenHeight)
         }
 
         item {
-            TitleSection(viewModel = viewModel, show = tvShowState.show)
+            TitleSection(viewModel = viewModel, show = show)
         }
 
         item {
@@ -71,7 +65,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
 
 
         item {
-            Overview(show = loadedTVShow)
+            Overview(show = show)
         }
 
         item {
