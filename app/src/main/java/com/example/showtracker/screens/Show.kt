@@ -1,5 +1,6 @@
 package com.example.showtracker.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,6 +49,9 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
 
     viewModel.loadTVShowFromDataStore()
     val loadedTVShow: TVShow = viewModel.loadedTVShow.value ?: Utils.defaultTVShow
+
+    val shows = viewModel.loadedTVShows.value ?: emptyList()
+    Log.d("Show", "$shows")
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
