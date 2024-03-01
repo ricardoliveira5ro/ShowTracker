@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,11 +25,7 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     private val _tvShowState = mutableStateOf(TVShowState())
     val tvShowState: State<TVShowState> = _tvShowState
 
-    private val _loadedTVShow = MutableLiveData<TVShow>()
-    val loadedTVShow: LiveData<TVShow> = _loadedTVShow
-
     private val _loadedTVShows = MutableLiveData<List<TVShow>>()
-    val loadedTVShows: LiveData<List<TVShow>> = _loadedTVShows
 
     init {
         fetchTVShowList()
@@ -45,7 +40,7 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     }
 
     fun saveTVShowsToDataStore(tvShow: TVShow) {
-        val shows: List<TVShow> = listOf(tvShow, tvShow)
+        val shows = _loadedTVShows.value.orEmpty().plus(tvShow)
         viewModelScope.launch {
             val success = dataStoreHelper.saveShows(shows).first()
             if (success) {
@@ -64,23 +59,15 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
         }
     }
 
-    fun saveTVShowToDataStore(tvShow: TVShow) {
-        viewModelScope.launch {
-            val success = dataStoreHelper.saveShow(tvShow).first()
-            if (success) {
-                Log.d("MainViewModel", "Save Success")
-            } else {
-                // Error saving show
-            }
-        }
-    }
+    fun loadTVShowById(id: Int): TVShow {
+        var show = _loadedTVShows.value.orEmpty().find { it.id == id }
 
-    fun loadTVShowFromDataStore() {
-        viewModelScope.launch {
-            dataStoreHelper.loadShow().collect {
-                _loadedTVShow.value = it
-            }
+        if(show == null) {
+            fetchTVShow(id)
+            show = _tvShowState.value.show
         }
+
+        return show
     }
 
     private fun fetchTVShowList() {
@@ -148,6 +135,8 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
                     _tvShowState.value = _tvShowState.value.copy(
                         show = show
                     )
+
+                    Log.d("MainViewModel", "Fetch tv show by id success")
 
                 } catch (e: Exception) {
                     Log.e("MainViewModel", "Error fetching TV Show with id $id: ${e.message}", e)
