@@ -108,6 +108,12 @@ class DataStoreHelper(val context: Context) {
         }
     }
 
+    fun loadShows(): Flow<List<TVShow>> {
+        return context.protoDataStore.data.map { store ->
+            store.showsList.map { it.toTVShow() }
+        }
+    }
+
     suspend fun saveShow(tvShow: TVShow) : Flow<Boolean> {
         return flow<Boolean> {
             context.dataStore.updateData {

@@ -29,8 +29,12 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     private val _loadedTVShow = MutableLiveData<TVShow>()
     val loadedTVShow: LiveData<TVShow> = _loadedTVShow
 
+    private val _loadedTVShows = MutableLiveData<List<TVShow>>()
+    val loadedTVShows: LiveData<List<TVShow>> = _loadedTVShows
+
     init {
         fetchTVShowList()
+        loadTVShowsFromDataStore()
     }
 
     val currentScreen: MutableState<Screen>
@@ -48,6 +52,14 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
                 Log.d("MainViewModel", "Save shows success")
             } else {
                 // Error saving show
+            }
+        }
+    }
+
+    private fun loadTVShowsFromDataStore() {
+        viewModelScope.launch {
+            dataStoreHelper.loadShows().collect { shows ->
+                _loadedTVShows.value = shows
             }
         }
     }
