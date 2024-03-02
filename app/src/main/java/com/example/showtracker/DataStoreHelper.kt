@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import com.example.showtracker.model.Genre
+import com.example.showtracker.model.Season
 import com.example.showtracker.model.TVShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -53,6 +54,7 @@ class DataStoreHelper(val context: Context) {
             .setVoteCount(this.vote_count)
             .setWatchlist(this.watchlist)
             .addAllGenres(this.genres.map { it.toProtoGenreItem() })
+            .addAllSeasons(this.seasons.map { it.toProtoSeasonItem() })
             .build()
     }
 
@@ -69,7 +71,7 @@ class DataStoreHelper(val context: Context) {
             vote_count = this.voteCount,
             watchlist = this.watchlist,
             episodes = emptyList(),
-            seasons = emptyList(),
+            seasons = this.seasonsList.map { it.toSeason() },
             genres = this.genresList.map { it.toGenre() },
             number_of_episodes = 1,
             number_of_seasons = 1
@@ -87,6 +89,22 @@ class DataStoreHelper(val context: Context) {
         return Genre(
             id = this.idGenre,
             name = this.nameGenre
+        )
+    }
+
+    private fun Season.toProtoSeasonItem(): ProtoSeasonItem {
+        return ProtoSeasonItem.newBuilder()
+            .setIdSeason(this.id)
+            .setSeasonNumber(this.season_number)
+            .setEpisodeCount(this.episode_count)
+            .build()
+    }
+
+    private fun ProtoSeasonItem.toSeason(): Season {
+        return Season(
+            id = this.idSeason,
+            season_number = this.seasonNumber,
+            episode_count = this.episodeCount
         )
     }
 }
