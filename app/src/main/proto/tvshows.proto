@@ -8,6 +8,12 @@ message ProtoGenreItem {
   string nameGenre = 2;
 }
 
+message ProtoSeasonItem {
+  int32 idSeason = 1;
+  int32 season_number = 2;
+  int32 episode_count = 3;
+}
+
 message ProtoShowItem {
   int32 id = 1;
   string name = 2;
@@ -20,6 +26,7 @@ message ProtoShowItem {
   int32 vote_count = 9;
   bool watchlist = 10;
   repeated ProtoGenreItem genres = 11;
+  repeated ProtoSeasonItem seasons = 12;
 }
 
 message ProtoShowItems {
