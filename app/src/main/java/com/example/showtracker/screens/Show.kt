@@ -60,7 +60,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
         }
 
         item {
-            Rating_Genres(show = tvShowState.show)
+            Rating_Genres(show = show)
         }
 
 

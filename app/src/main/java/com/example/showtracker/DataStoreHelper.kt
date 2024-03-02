@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
+import com.example.showtracker.model.Genre
 import com.example.showtracker.model.TVShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -51,6 +52,7 @@ class DataStoreHelper(val context: Context) {
             .setVoteAverage(this.vote_average)
             .setVoteCount(this.vote_count)
             .setWatchlist(this.watchlist)
+            .addAllGenres(this.genres.map { it.toProtoGenreItem() })
             .build()
     }
 
@@ -68,9 +70,23 @@ class DataStoreHelper(val context: Context) {
             watchlist = this.watchlist,
             episodes = emptyList(),
             seasons = emptyList(),
-            genres = emptyList(),
+            genres = this.genresList.map { it.toGenre() },
             number_of_episodes = 1,
             number_of_seasons = 1
+        )
+    }
+
+    private fun Genre.toProtoGenreItem(): ProtoGenreItem {
+        return ProtoGenreItem.newBuilder()
+            .setIdGenre(this.id)
+            .setNameGenre(this.name)
+            .build()
+    }
+
+    private fun ProtoGenreItem.toGenre(): Genre {
+        return Genre(
+            id = this.idGenre,
+            name = this.nameGenre
         )
     }
 }
