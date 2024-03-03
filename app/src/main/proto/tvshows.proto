@@ -14,6 +14,14 @@ message ProtoSeasonItem {
   int32 episode_count = 3;
 }
 
+message ProtoEpisodeItem {
+  int32 idEpisode = 1;
+  string nameEpisode = 2;
+  int32 episode_season_number = 3;
+  int32 episode_number = 4;
+  bool isWatched = 5;
+}
+
 message ProtoShowItem {
   int32 id = 1;
   string name = 2;
@@ -27,6 +35,7 @@ message ProtoShowItem {
   bool watchlist = 10;
   repeated ProtoGenreItem genres = 11;
   repeated ProtoSeasonItem seasons = 12;
+  repeated ProtoEpisodeItem episodes = 13;
 }
 
 message ProtoShowItems {

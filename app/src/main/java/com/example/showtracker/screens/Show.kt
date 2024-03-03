@@ -42,9 +42,6 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
     val navBackStackEntry by controller.currentBackStackEntryAsState()
     val id = navBackStackEntry?.arguments?.getString("id")?.toInt()?: -1
 
-    viewModel.fetchTVShow(id)
-    val tvShowState by viewModel.tvShowState
-
     val show = viewModel.loadTVShowById(id)
 
     LazyColumn(
@@ -86,7 +83,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
 
 
         item {
-            EpisodeSlider(show = tvShowState.show, screenWidth = screenWidth)
+            EpisodeSlider(show = show, screenWidth = screenWidth)
         }
 
 
@@ -106,9 +103,9 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
             }
         }
 
-        items(tvShowState.show.seasons) {
+        items(show.seasons) {
             season ->
-                SeasonsList(show = tvShowState.show, seasonNumber = season.season_number)
+                SeasonsList(show = show, seasonNumber = season.season_number)
         }
     }
 }
