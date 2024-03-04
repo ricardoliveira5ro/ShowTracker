@@ -18,7 +18,7 @@ private val Context.protoDataStore: DataStore<ProtoShowItems> by dataStore(
     serializer = TVShowsSerializer
 )
 
-class DataStoreHelper(val context: Context) {
+class DataStoreHelper(private val context: Context) {
 
     suspend fun saveShows(shows: List<TVShow>) : Flow<Boolean> {
         return flow {

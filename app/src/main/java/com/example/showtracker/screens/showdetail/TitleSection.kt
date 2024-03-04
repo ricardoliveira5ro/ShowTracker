@@ -60,17 +60,18 @@ fun TitleSection(viewModel: MainViewModel, show: TVShow) {
         }
 
         Column {
-            var icon by remember { mutableStateOf(if (show.watchlist) R.drawable.added else R.drawable.add) }
+            if (show.id != -1) {
+                var imageSource by remember { mutableStateOf(if (show.watchlist) R.drawable.added else R.drawable.add) }
 
-            IconButton(
-                onClick = {
-                    icon = if (show.watchlist) R.drawable.added else R.drawable.add
-                    show.watchlist = !show.watchlist
-
-                    viewModel.saveTVShowsToDataStore(show)
+                IconButton(
+                    onClick = {
+                        show.watchlist = !show.watchlist
+                        imageSource = if (show.watchlist) R.drawable.added else R.drawable.add
+                        viewModel.saveTVShowsToDataStore(show)
+                    }
+                ) {
+                    Image(painter = painterResource(id = imageSource), contentDescription = "Add/Remove to/from Watchlist")
                 }
-            ) {
-                Image(painter = painterResource(id = icon), contentDescription = "Add/Remove to/from Watchlist")
             }
         }
     }
