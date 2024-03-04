@@ -40,9 +40,14 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     }
 
     fun saveTVShowsToDataStore(tvShow: TVShow) {
-        val shows = _loadedTVShows.value.orEmpty().plus(tvShow)
+        val showsToSave = _loadedTVShows.value.orEmpty().toMutableList()
+        val index = showsToSave.indexOfFirst { it.id == tvShow.id }
+
+        if (index != -1) showsToSave[index] = tvShow
+        else showsToSave.add(tvShow)
+
         viewModelScope.launch {
-            val success = dataStoreHelper.saveShows(shows).first()
+            val success = dataStoreHelper.saveShows(showsToSave.toList()).first()
             if (success) {
                 Log.d("MainViewModel", "Save shows success")
             } else {
