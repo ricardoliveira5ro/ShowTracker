@@ -44,6 +44,8 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
 
     val show = viewModel.loadTVShowById(id)
 
+    //TODO: Bug fix --> when loaded from proto datastore id could be -1 / when loaded async by API could be -1 or previous show id clicked
+
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -53,7 +55,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
         }
 
         item {
-            TitleSection(viewModel = viewModel, show = show)
+            TitleSection(viewModel = viewModel, show = show, id = id)
         }
 
         item {
