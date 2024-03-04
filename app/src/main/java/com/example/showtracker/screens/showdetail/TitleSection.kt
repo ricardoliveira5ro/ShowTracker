@@ -29,7 +29,7 @@ import com.example.showtracker.model.TVShow
 import com.example.showtracker.utils.Utils
 
 @Composable
-fun TitleSection(viewModel: MainViewModel, show: TVShow) {
+fun TitleSection(viewModel: MainViewModel, show: TVShow, id: Int) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,7 +60,7 @@ fun TitleSection(viewModel: MainViewModel, show: TVShow) {
         }
 
         Column {
-            if (show.id != -1) {
+            if (show.id != -1 && show.id == id) {
                 var imageSource by remember { mutableStateOf(if (show.watchlist) R.drawable.added else R.drawable.add) }
 
                 IconButton(
