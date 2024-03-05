@@ -23,8 +23,6 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     val tvShowSearchState: State<TVShowListState> = _tvShowSearchState
 
     private val _tvShowState = mutableStateOf(TVShowState())
-    val tvShowState: State<TVShowState> = _tvShowState
-
     private val _loadedTVShows = MutableLiveData<List<TVShow>>()
 
     init {
@@ -73,6 +71,19 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
         }
 
         return show
+    }
+
+    fun loadWatchlist(): List<TVShowShort> {
+        return _loadedTVShows.value.orEmpty().filter { it.watchlist }.map { show ->
+            TVShowShort(
+                id = show.id,
+                name = show.name,
+                poster_path = show.poster_path,
+                backdrop_path = show.backdrop_path,
+                vote_average = show.vote_average,
+                vote_count = show.vote_count
+            )
+        }
     }
 
     private fun fetchTVShowList() {
@@ -160,6 +171,10 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
 
     fun setMockTVShow(show: TVShow) {
         _tvShowState.value = TVShowState(show = show)
+    }
+
+    fun setMockLoadedTVShows(mockTVShows: List<TVShow>) {
+        _loadedTVShows.value = mockTVShows
     }
 
     data class TVShowListState(

@@ -21,7 +21,7 @@ fun Navigation(viewModel: MainViewModel, navController: NavController, pd: Paddi
             Home(viewModel, navController)
         }
         composable(Screen.WatchList.route) {
-            Watchlist()
+            Watchlist(viewModel, navController)
         }
         composable(Screen.Show.route + "/{id}") {
             Show(viewModel, navController)
@@ -29,7 +29,7 @@ fun Navigation(viewModel: MainViewModel, navController: NavController, pd: Paddi
         composable(Screen.Search.route + "/{searchInput}") {
             backStackEntry ->
                 val searchInput = backStackEntry.arguments?.getString("searchInput") ?: ""
-                Search(viewModel, searchInput)
+                Search(viewModel, navController, searchInput)
         }
     }
 }

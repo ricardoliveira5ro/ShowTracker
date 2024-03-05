@@ -17,8 +17,6 @@ object Utils {
 
     const val TMDB_IMAGES_BASE_URL = "https://image.tmdb.org/t/p/original"
 
-    val defaultTVShow = TVShow(-1, "", "", -1, -1, "", "", null, null, -1f, -1, emptyList(), emptyList(), emptyList())
-
     val mockTVShowsListPreview = listOf(
         TVShowShort(1, "TV Show 1", null, null, 5f, 3),
         TVShowShort(2, "TV Show 2", null, null, 5f, 3),
@@ -52,5 +50,11 @@ object Utils {
             Episode(0, "Episode 0", 0, 1),
         ),
         watchlist = true
+    )
+
+    val mockWatchlistPreview = listOf(
+        mockTVShowPreview,
+        mockTVShowPreview,
+        mockTVShowPreview
     )
 }
