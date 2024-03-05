@@ -1,6 +1,7 @@
 package com.example.showtracker.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -32,8 +33,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.showtracker.R
+import com.example.showtracker.Screen
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.TVShowShort
 import com.example.showtracker.screens.stars.FractionalRatingBar
@@ -41,7 +45,7 @@ import com.example.showtracker.ui.theme.ShowTrackerTheme
 import com.example.showtracker.utils.Utils
 
 @Composable
-fun ShowList(showList: List<TVShowShort>) {
+fun ShowList(showList: List<TVShowShort>, controller: NavController) {
     if (showList.isEmpty()) {
         NothingToShowItem()
     }
@@ -49,14 +53,14 @@ fun ShowList(showList: List<TVShowShort>) {
         LazyColumn {
             items(showList) {
                 show ->
-                    ShowListItem(show = show)
+                    ShowListItem(show = show, controller = controller)
             }
         }
     }
 }
 
 @Composable
-fun ShowListItem(show: TVShowShort) {
+fun ShowListItem(show: TVShowShort, controller: NavController) {
     BoxWithConstraints(
         modifier = Modifier.padding(vertical = 12.dp)
     ) {
@@ -68,19 +72,20 @@ fun ShowListItem(show: TVShowShort) {
         Card(
             modifier = Modifier
                 .size(width = boxWidth / 3.5f, height = 140.dp)
-                .zIndex(2f),
+                .zIndex(2f)
+                .clickable { controller.navigate(Screen.Show.route + "/${show.id}") },
             shape = RoundedCornerShape(6.dp)
         ) {
             Image(painter = painter, contentDescription = show.name, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
         }
-        Column() {
+        Column {
             Spacer(modifier = Modifier
                 .height(20.dp)
                 .width(10.dp))
-            Row( ) {
+            Row {
                 Spacer(modifier = Modifier.width(20.dp))
                 Card(
-                    modifier = Modifier.size(width = boxWidth, height = 130.dp),
+                    modifier = Modifier.size(width = boxWidth, height = 130.dp).clickable { controller.navigate(Screen.Show.route + "/${show.id}") },
                     shape = RoundedCornerShape(6.dp),
                     colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.blue_boxes))
                 ) {
@@ -155,7 +160,8 @@ fun ShowListPreview() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            ShowList(showList)
+            val controller = rememberNavController()
+            ShowList(showList, controller)
         }
     }
 }

@@ -14,7 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,14 +23,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.showtracker.MainViewModel
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
-import com.example.showtracker.model.DummyShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
+import com.example.showtracker.utils.Utils
 
 @Composable
-fun Watchlist() {
-    val watchlist = remember { DummyShow.watchlist }
+fun Watchlist(viewModel: MainViewModel, controller: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,7 +58,7 @@ fun Watchlist() {
 
         Spacer(modifier = Modifier.padding(vertical = 12.dp))
 
-        //ShowList(showList = watchlist)
+        ShowList(showList = viewModel.loadWatchlist(), controller = controller)
     }
 }
 
@@ -68,7 +70,11 @@ fun WatchlistPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Watchlist()
+            val viewModel: MainViewModel = viewModel()
+            viewModel.setMockLoadedTVShows(Utils.mockWatchlistPreview)
+            val controller = rememberNavController()
+
+            Watchlist(viewModel, controller)
         }
     }
 }

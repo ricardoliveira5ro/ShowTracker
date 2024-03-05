@@ -20,13 +20,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.showtracker.MainViewModel
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 import com.example.showtracker.utils.Utils
 
 @Composable
-fun Search(viewModel: MainViewModel, initialSearchInput: String) {
+fun Search(viewModel: MainViewModel, controller: NavController, initialSearchInput: String) {
     val (searchInput, setSearchInput) = remember { mutableStateOf(initialSearchInput) }
     viewModel.fetchTVShowSearch(searchInput)
 
@@ -50,7 +52,7 @@ fun Search(viewModel: MainViewModel, initialSearchInput: String) {
         SearchBar(onSearchInputChanged = setSearchInput, onSearchSubmitted = { }, initialSearchInput)
         Spacer(modifier = Modifier.height(12.dp))
 
-        ShowList(showList = tvShowSearchState.list)
+        ShowList(showList = tvShowSearchState.list, controller)
     }
 }
 
@@ -64,8 +66,9 @@ fun SearchPreview() {
         ) {
             val viewModel: MainViewModel = viewModel()
             viewModel.setMockTVShowLists(Utils.mockTVShowsListPreview)
+            val controller = rememberNavController()
 
-            Search(viewModel, "")
+            Search(viewModel, controller, "")
         }
     }
 }
