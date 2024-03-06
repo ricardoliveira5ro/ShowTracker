@@ -17,7 +17,7 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     private val _currentScreen: MutableState<Screen> = mutableStateOf(Screen.Home)
 
     private val _tvShowListState = mutableStateOf(TVShowListState())
-    val tvShowListState: State<TVShowListState> = _tvShowListState
+    private val _tvShowRecommendationsListState = mutableStateOf(TVShowListState())
 
     private val _tvShowSearchState = mutableStateOf(TVShowListState())
     val tvShowSearchState: State<TVShowListState> = _tvShowSearchState
@@ -72,8 +72,6 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
             show = _tvShowState.value.show
         }
 
-        Log.d("EpisodesList", "list -> ${show.episodes.map { it.isWatched }}")
-
         return show
     }
 
@@ -88,6 +86,19 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
                 vote_count = show.vote_count
             )
         }
+    }
+
+    fun tvShowsList(id: Int): List<TVShowShort> {
+        if(id != -1) {
+            Log.d("HomeScreen", "AQUI -> $id")
+            fetchTVShowRecommendationsList(id)
+            Log.d("HomeScreen", "lista -> ${_tvShowRecommendationsListState.value.list.map { it.name }}")
+            return _tvShowRecommendationsListState.value.list
+        }
+
+        Log.d("HomeScreen", "FORA -> $id")
+
+        return _tvShowListState.value.list
     }
 
     private fun fetchTVShowList() {
@@ -106,6 +117,28 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
                 _tvShowListState.value = _tvShowListState.value.copy(
                     error = "Error fetching TV Shows ${e.message}"
                 )
+            }
+        }
+    }
+
+    private fun fetchTVShowRecommendationsList(id: Int) {
+        if (id != -1) {
+            viewModelScope.launch {
+                try {
+                    Log.d("MainViewModel", "Fetching recommendations shows... with id $id")
+                    val response = apiService.getRecommendations(id)
+                    Log.d("MainViewModel", "Response: $response")
+                    _tvShowRecommendationsListState.value = _tvShowRecommendationsListState.value.copy(
+                        list = response.results,
+                        error = null
+                    )
+
+                } catch (e: Exception) {
+                    Log.e("MainViewModel", "Error fetching TV shows: ${e.message}", e)
+                    _tvShowRecommendationsListState.value = _tvShowRecommendationsListState.value.copy(
+                        error = "Error fetching TV Shows ${e.message}"
+                    )
+                }
             }
         }
     }

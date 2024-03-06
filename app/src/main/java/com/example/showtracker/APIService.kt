@@ -24,6 +24,13 @@ interface APIService {
         @Query("api_key") apiKey: String = BuildConfig.tmdbKey
     ):TVShowsShortResponse
 
+    @GET("tv/{series_id}/recommendations")
+    suspend fun getRecommendations(
+        @Path("series_id") tvId: Int,
+        @Query("page") page: Int = 1,
+        @Query("api_key") apiKey: String = BuildConfig.tmdbKey
+    ):TVShowsShortResponse
+
     @GET("search/tv")
     suspend fun getTVShowsBySearch(
         @Query("query") query: String,
