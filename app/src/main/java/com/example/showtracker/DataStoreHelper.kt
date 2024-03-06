@@ -116,6 +116,7 @@ class DataStoreHelper(private val context: Context) {
             .setNameEpisode(this.name)
             .setEpisodeSeasonNumber(this.season_number)
             .setEpisodeNumber(this.episode_number)
+            .setIsWatched(this.isWatched)
             .build()
     }
 
@@ -124,7 +125,8 @@ class DataStoreHelper(private val context: Context) {
             id = this.idEpisode,
             name = this.nameEpisode,
             season_number = this.episodeSeasonNumber,
-            episode_number = this.episodeNumber
+            episode_number = this.episodeNumber,
+            isWatched = this.isWatched
         )
     }
 }

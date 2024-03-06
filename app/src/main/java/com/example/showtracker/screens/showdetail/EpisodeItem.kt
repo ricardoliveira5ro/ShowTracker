@@ -15,6 +15,10 @@ import androidx.compose.material.Card
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,18 +30,24 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.showtracker.MainViewModel
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
-import com.example.showtracker.model.Episode
+import com.example.showtracker.model.TVShow
 import com.example.showtracker.utils.Utils
 
 @Composable
 fun EpisodeItem(
-    episode: Episode,
+    viewModel: MainViewModel,
+    show: TVShow,
+    episodeIndex: Int,
     imageEpisodeUrl: String?,
     width: Dp,
-    isFirstEpisode: Boolean
+    isFirstEpisode: Boolean,
+    onNextEpisodeChange: (Int) -> Unit
 ) {
+    val episode by remember { mutableStateOf(show.episodes[episodeIndex]) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,11 +96,19 @@ fun EpisodeItem(
                         fontSize = 16.sp
                     )
 
-                    val icon = if (episode.isWatched) R.drawable.added else R.drawable.add
+                    var imageSource by remember { mutableStateOf(if (episode.isWatched) R.drawable.added else R.drawable.add) }
 
-                    IconButton(onClick = {  }, modifier = Modifier.size(24.dp)) {
+                    IconButton(
+                        modifier = Modifier.size(24.dp),
+                        onClick = {
+                            episode.isWatched = !episode.isWatched
+                            imageSource = if (episode.isWatched) R.drawable.added else R.drawable.add
+                            viewModel.saveTVShowsToDataStore(show)
+                            onNextEpisodeChange(show.episodes.indexOfFirst { !it.isWatched })
+                        }
+                    ) {
                         Image(
-                            painter = painterResource(id = icon),
+                            painter = painterResource(id = imageSource),
                             contentDescription = "Watched",
                         )
                     }

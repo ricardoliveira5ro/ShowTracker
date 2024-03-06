@@ -5,7 +5,7 @@ data class Episode (
     val name: String,
     val season_number: Int,
     val episode_number: Int,
-    val isWatched: Boolean = false
+    var isWatched: Boolean = false
 )
 
 data class EpisodesResponse (val episodes: List<Episode>)
