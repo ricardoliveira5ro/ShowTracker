@@ -70,6 +70,8 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
             show = _tvShowState.value.show
         }
 
+        Log.d("EpisodesList", "list -> ${show.episodes.map { it.isWatched }}")
+
         return show
     }
 
