@@ -46,7 +46,6 @@ import com.example.showtracker.Screen
 import com.example.showtracker.fonts.Typography.nexaFont
 import com.example.showtracker.fonts.Typography.robotoFont
 import com.example.showtracker.fonts.Typography.openSans
-import com.example.showtracker.model.DummyShow
 import com.example.showtracker.ui.theme.ShowTrackerTheme
 import com.example.showtracker.utils.Utils
 
@@ -55,8 +54,12 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
     var searchInput by remember { mutableStateOf("") }
 
-    val tvShowListState by viewModel.tvShowListState
     val loadedTVShows by remember { mutableStateOf(viewModel.loadedTVShows) }
+    val showList = loadedTVShows.value.orEmpty().filter {show ->
+        show.episodes.any { it.isWatched }
+    }
+
+    val tvShowList = viewModel.tvShowsList(showList.firstOrNull()?.id ?: -1)
 
     LazyColumn(modifier = Modifier
         .fillMaxSize()
@@ -100,10 +103,6 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             ) {
-
-                val showList = loadedTVShows.value.orEmpty().filter {show ->
-                    show.episodes.any { it.isWatched }
-                }
 
                 if (showList.isEmpty()) {
                     Row(
@@ -169,7 +168,7 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
             Text(text = "Recommended for you", modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), color = Color.White, fontFamily = openSans, fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
 
-        items(tvShowListState.list.chunked(2)) {
+        items(tvShowList.chunked(2)) {
             recommended ->
                 LazyRow(
                     modifier = Modifier
