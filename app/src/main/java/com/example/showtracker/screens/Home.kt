@@ -56,6 +56,7 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
     var searchInput by remember { mutableStateOf("") }
 
     val tvShowListState by viewModel.tvShowListState
+    val loadedTVShows by remember { mutableStateOf(viewModel.loadedTVShows) }
 
     LazyColumn(modifier = Modifier
         .fillMaxSize()
@@ -99,7 +100,11 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             ) {
-                val showList = DummyShow.shows //DummyShow.testEmptyList
+
+                val showList = loadedTVShows.value.orEmpty().filter {show ->
+                    show.episodes.any { it.isWatched }
+                }
+
                 if (showList.isEmpty()) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -129,19 +134,21 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
                                     modifier = Modifier
                                         .size(width = screenWidth / 1.6f, height = screenWidth / 3f)
                                         .padding(end = 12.dp)
-                                        //.clickable { controller.navigate(Screen.Show.route) }
+                                        .clickable { controller.navigate(Screen.Show.route + "/${show.id}") }
                                 ) {
                                     Box(
                                         Modifier.fillMaxSize()
                                     ) {
+                                        val painter = if (show.backdrop_path != null) rememberAsyncImagePainter(Utils.TMDB_IMAGES_BASE_URL + show.backdrop_path)
+                                                        else painterResource(id = R.drawable.no_image)
                                         Image(
-                                            painter = painterResource(id = show.imageResourceId),
-                                            contentDescription = show.title,
+                                            painter = painter,
+                                            contentDescription = show.name,
                                             modifier = Modifier.fillMaxSize(),
                                             contentScale = ContentScale.Crop
                                         )
                                         Text(
-                                            text = show.title,
+                                            text = show.name,
                                             modifier = Modifier
                                                 .padding(horizontal = 16.dp, vertical = 8.dp)
                                                 .align(Alignment.BottomStart),

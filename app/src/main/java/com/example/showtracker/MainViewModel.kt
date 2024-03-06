@@ -23,7 +23,9 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     val tvShowSearchState: State<TVShowListState> = _tvShowSearchState
 
     private val _tvShowState = mutableStateOf(TVShowState())
+
     private val _loadedTVShows = MutableLiveData<List<TVShow>>()
+    val loadedTVShows: MutableLiveData<List<TVShow>> = _loadedTVShows
 
     init {
         fetchTVShowList()
