@@ -55,8 +55,12 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
     var searchInput by remember { mutableStateOf("") }
 
     val loadedTVShows by remember { mutableStateOf(viewModel.loadedTVShows) }
-    val showList = loadedTVShows.value.orEmpty().filter {show ->
-        show.episodes.any { it.isWatched }
+
+    val showList = loadedTVShows.value.orEmpty().filter { show ->
+        val hasWatchedEpisode = show.episodes.any { episode -> episode.isWatched }
+        val allEpisodesWatched = show.episodes.all { episode -> episode.isWatched }
+
+        hasWatchedEpisode && !allEpisodesWatched
     }
 
     val tvShowList = viewModel.tvShowsList(showList.firstOrNull()?.id ?: -1)
