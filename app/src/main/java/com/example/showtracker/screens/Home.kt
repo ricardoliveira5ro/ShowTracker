@@ -1,5 +1,6 @@
 package com.example.showtracker.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,11 +8,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +43,8 @@ import com.example.showtracker.utils.Utils
 
 @Composable
 fun Home(viewModel: MainViewModel, controller: NavController) {
+    val listState = rememberLazyListState()
+
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
     var searchInput by remember { mutableStateOf("") }
 
@@ -52,10 +59,17 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
 
     val tvShowList = viewModel.tvShowsList(showList.firstOrNull()?.id ?: -1)
 
+    val reachedBottom: Boolean by remember { derivedStateOf { listState.reachedBottom() } }
+
+    LaunchedEffect(reachedBottom) {
+        if(reachedBottom) Log.d("Home Screen", "Reach the bottom of the screen")
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 12.dp)
+            .padding(horizontal = 12.dp),
+        state = listState
     ) {
 
         item {
@@ -90,6 +104,11 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
             Spacer(modifier = Modifier.height(4.dp))
         }
     }
+}
+
+private fun LazyListState.reachedBottom(): Boolean {
+    val lastVisibleItem = this.layoutInfo.visibleItemsInfo.lastOrNull()
+    return lastVisibleItem?.index != 0 && lastVisibleItem?.index == this.layoutInfo.totalItemsCount - 1
 }
 
 @Preview(showBackground = true)

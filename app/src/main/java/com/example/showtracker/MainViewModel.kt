@@ -28,7 +28,6 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     val loadedTVShows: MutableLiveData<List<TVShow>> = _loadedTVShows
 
     init {
-        fetchTVShowList()
         loadTVShowsFromDataStore()
     }
 
@@ -90,14 +89,11 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
 
     fun tvShowsList(id: Int): List<TVShowShort> {
         if(id != -1) {
-            Log.d("HomeScreen", "AQUI -> $id")
             fetchTVShowRecommendationsList(id)
-            Log.d("HomeScreen", "lista -> ${_tvShowRecommendationsListState.value.list.map { it.name }}")
             return _tvShowRecommendationsListState.value.list
         }
 
-        Log.d("HomeScreen", "FORA -> $id")
-
+        fetchTVShowList()
         return _tvShowListState.value.list
     }
 
