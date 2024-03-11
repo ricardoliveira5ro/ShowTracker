@@ -157,7 +157,7 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
         }
     }
 
-    fun fetchTVShow(id: Int) {
+    private fun fetchTVShow(id: Int) {
         if (id != -1) {
             viewModelScope.launch {
                 try {
