@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,8 +17,10 @@ import kotlinx.coroutines.launch
 class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     private val _currentScreen: MutableState<Screen> = mutableStateOf(Screen.Home)
 
-    private val _tvShowListState = mutableStateOf(TVShowListState())
-    private val _tvShowRecommendationsListState = mutableStateOf(TVShowListState())
+    private val _tvShowListState = MutableLiveData<List<TVShowShort>>()
+    val topRated: LiveData<List<TVShowShort>> = _tvShowListState
+    private val _tvShowRecommendationsListState = MutableLiveData<List<TVShowShort>>()
+    val recommendations: LiveData<List<TVShowShort>> = _tvShowRecommendationsListState
 
     private val _tvShowSearchState = mutableStateOf(TVShowListState())
     val tvShowSearchState: State<TVShowListState> = _tvShowSearchState
@@ -26,10 +29,6 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
 
     private val _loadedTVShows = MutableLiveData<List<TVShow>>()
     val loadedTVShows: MutableLiveData<List<TVShow>> = _loadedTVShows
-
-    init {
-        loadTVShowsFromDataStore()
-    }
 
     val currentScreen: MutableState<Screen>
         get() = _currentScreen
@@ -55,7 +54,7 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
         }
     }
 
-    private fun loadTVShowsFromDataStore() {
+    fun loadTVShowsFromDataStore() {
         viewModelScope.launch {
             dataStoreHelper.loadShows().collect { shows ->
                 _loadedTVShows.value = shows
@@ -87,53 +86,32 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
         }
     }
 
-    fun tvShowsList(id: Int): List<TVShowShort> {
-        if(id != -1) {
-            fetchTVShowRecommendationsList(id)
-            return _tvShowRecommendationsListState.value.list
-        }
-
-        fetchTVShowList()
-        return _tvShowListState.value.list
-    }
-
-    private fun fetchTVShowList() {
+    fun fetchTVShowTopRated() {
         viewModelScope.launch {
             try {
                 Log.d("MainViewModel", "Fetching TV shows...")
                 val response = apiService.getTopRatedTVShows()
                 Log.d("MainViewModel", "Response: $response")
-                _tvShowListState.value = _tvShowListState.value.copy(
-                    list = response.results.sortedByDescending { it.vote_count },
-                    error = null
-                )
+                _tvShowListState.value = response.results.sortedByDescending { it.vote_count }
 
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Error fetching TV shows: ${e.message}", e)
-                _tvShowListState.value = _tvShowListState.value.copy(
-                    error = "Error fetching TV Shows ${e.message}"
-                )
             }
         }
     }
 
-    private fun fetchTVShowRecommendationsList(id: Int) {
+    fun fetchTVShowRecommendationsList(id: Int) {
+        Log.d("MainViewModel", "Id-> $id")
         if (id != -1) {
             viewModelScope.launch {
                 try {
                     Log.d("MainViewModel", "Fetching recommendations shows... with id $id")
                     val response = apiService.getRecommendations(id)
                     Log.d("MainViewModel", "Response: $response")
-                    _tvShowRecommendationsListState.value = _tvShowRecommendationsListState.value.copy(
-                        list = response.results,
-                        error = null
-                    )
+                    _tvShowRecommendationsListState.value = response.results
 
                 } catch (e: Exception) {
                     Log.e("MainViewModel", "Error fetching TV shows: ${e.message}", e)
-                    _tvShowRecommendationsListState.value = _tvShowRecommendationsListState.value.copy(
-                        error = "Error fetching TV Shows ${e.message}"
-                    )
                 }
             }
         }
@@ -198,7 +176,7 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     }
 
     fun setMockTVShowLists(mockTVShows: List<TVShowShort>) {
-        _tvShowListState.value = TVShowListState(list = mockTVShows)
+        //_tvShowListState.value = TVShowListState(list = mockTVShows)
         _tvShowSearchState.value = TVShowListState(list = mockTVShows)
     }
 
