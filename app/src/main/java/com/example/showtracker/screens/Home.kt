@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,16 +49,28 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
     var searchInput by remember { mutableStateOf("") }
 
-    val loadedTVShows by remember { mutableStateOf(viewModel.loadedTVShows) }
+    val loadedTVShows by viewModel.loadedTVShows.observeAsState(emptyList())
+    val recommendations by viewModel.recommendations.observeAsState(emptyList())
+    val topRated by viewModel.topRated.observeAsState(emptyList())
 
-    val showList = loadedTVShows.value.orEmpty().filter { show ->
-        val hasWatchedEpisode = show.episodes.any { episode -> episode.isWatched }
-        val allEpisodesWatched = show.episodes.all { episode -> episode.isWatched }
-
-        hasWatchedEpisode && !allEpisodesWatched
+    val showList = remember(loadedTVShows) {
+        loadedTVShows.filter { show ->
+            val hasWatchedEpisode = show.episodes.any { episode -> episode.isWatched }
+            val allEpisodesWatched = show.episodes.all { episode -> episode.isWatched }
+            hasWatchedEpisode && !allEpisodesWatched
+        }
     }
 
-    val tvShowList = viewModel.tvShowsList(showList.firstOrNull()?.id ?: -1)
+    LaunchedEffect(Unit) {
+        viewModel.loadTVShowsFromDataStore()
+    }
+
+    LaunchedEffect(loadedTVShows) {
+        val id = showList.firstOrNull()?.id ?: -1
+
+        if (id != -1) viewModel.fetchTVShowRecommendationsList(id)
+        else viewModel.fetchTVShowTopRated()
+    }
 
     val reachedBottom: Boolean by remember { derivedStateOf { listState.reachedBottom() } }
 
@@ -99,7 +112,8 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
             Text(text = "Recommended for you", modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), color = Color.White, fontFamily = Typography.openSans, fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
 
-        items(tvShowList.chunked(2)) {items ->
+        val finalList = recommendations.ifEmpty { topRated }
+        items(finalList.chunked(2)) {items ->
             Recommended(controller = controller, items = items, screenWidth = screenWidth)
             Spacer(modifier = Modifier.height(4.dp))
         }
