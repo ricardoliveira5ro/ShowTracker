@@ -1,6 +1,5 @@
 package com.example.showtracker.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -75,7 +74,12 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
     val reachedBottom: Boolean by remember { derivedStateOf { listState.reachedBottom() } }
 
     LaunchedEffect(reachedBottom) {
-        if(reachedBottom) Log.d("Home Screen", "Reach the bottom of the screen")
+        if(reachedBottom) {
+            val id = showList.firstOrNull()?.id ?: -1
+
+            if (id != -1) viewModel.fetchTVShowRecommendationsList(id)
+            else viewModel.fetchTVShowTopRated()
+        }
     }
 
     LazyColumn(
