@@ -1,5 +1,6 @@
 package com.example.showtracker.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -67,6 +68,8 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
     LaunchedEffect(loadedTVShows) {
         val id = showList.firstOrNull()?.id ?: -1
 
+        Log.d("MainViewModel", "id -> $id")
+
         if (id != -1) viewModel.fetchTVShowRecommendationsList(id)
         else viewModel.fetchTVShowTopRated()
     }
@@ -77,8 +80,10 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
         if(reachedBottom) {
             val id = showList.firstOrNull()?.id ?: -1
 
+            Log.d("MainViewModel", "id bottom -> $id")
+
             if (id != -1) viewModel.fetchTVShowRecommendationsList(id)
-            else viewModel.fetchTVShowTopRated()
+            else viewModel.fetchTVShowTopRated(false)
         }
     }
 
@@ -116,7 +121,7 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
             Text(text = "Recommended for you", modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), color = Color.White, fontFamily = Typography.openSans, fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
 
-        val finalList = recommendations.ifEmpty { topRated }
+        val finalList = if ((showList.firstOrNull()?.id ?: -1) != -1) recommendations else topRated
         items(finalList.chunked(2)) {items ->
             Recommended(controller = controller, items = items, screenWidth = screenWidth)
             Spacer(modifier = Modifier.height(4.dp))
