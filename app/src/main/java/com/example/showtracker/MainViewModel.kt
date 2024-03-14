@@ -30,8 +30,9 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     private val _loadedTVShows = MutableLiveData<List<TVShow>>()
     val loadedTVShows: MutableLiveData<List<TVShow>> = _loadedTVShows
 
-    private var currentPage = 1
-    private var lastRecommendShow = -1
+    private var currentRecommendationPage = 1
+    private var currentTopRatedPage = 1
+    private var lastDisplayedShow = -1
 
     val currentScreen: MutableState<Screen>
         get() = _currentScreen
@@ -89,13 +90,26 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
         }
     }
 
-    fun fetchTVShowTopRated() {
+    fun fetchTVShowTopRated(isFirstLoad: Boolean = true) {
         viewModelScope.launch {
             try {
+                lastDisplayedShow = -1
+                if (isFirstLoad) currentTopRatedPage = 1
+
                 Log.d("MainViewModel", "Fetching TV shows...")
-                val response = apiService.getTopRatedTVShows()
+                val response = apiService.getTopRatedTVShows(page = currentTopRatedPage)
                 Log.d("MainViewModel", "Response: $response")
-                _tvShowListState.value = response.results.sortedByDescending { it.vote_count }
+                if (currentTopRatedPage == 1) {
+                    _tvShowListState.value = response.results.sortedByDescending { it.vote_count }
+
+                } else {
+                    val currentList = _tvShowListState.value.orEmpty().toMutableList()
+                    response.results.sortedByDescending { it.vote_count }.forEach { result ->
+                        if(currentList.none { it.id == result.id }) currentList.add(result)
+                    }
+                    _tvShowListState.value = currentList
+                }
+                currentTopRatedPage++
 
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Error fetching TV shows: ${e.message}", e)
@@ -108,13 +122,14 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
         if (id != -1) {
             viewModelScope.launch {
                 try {
-                    if (lastRecommendShow != id) currentPage = 1
+                    if (lastDisplayedShow != id) currentRecommendationPage = 1
 
                     Log.d("MainViewModel", "Fetching recommendations shows... with id $id")
-                    val response = apiService.getRecommendations(id, currentPage)
+                    val response = apiService.getRecommendations(id, currentRecommendationPage)
                     Log.d("MainViewModel", "Response: $response")
-                    if (currentPage == 1) {
+                    if (currentRecommendationPage == 1) {
                         _tvShowRecommendationsListState.value = response.results
+
                     } else {
                         val currentList = _tvShowRecommendationsListState.value.orEmpty().toMutableList()
                         response.results.forEach { result ->
@@ -122,8 +137,8 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
                         }
                         _tvShowRecommendationsListState.value = currentList
                     }
-                    currentPage++
-                    lastRecommendShow = id
+                    currentRecommendationPage++
+                    lastDisplayedShow = id
 
                 } catch (e: Exception) {
                     Log.e("MainViewModel", "Error fetching TV shows: ${e.message}", e)
