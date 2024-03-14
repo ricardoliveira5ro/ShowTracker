@@ -29,7 +29,7 @@ import com.example.showtracker.model.TVShow
 import com.example.showtracker.utils.Utils
 
 @Composable
-fun TitleSection(viewModel: MainViewModel, show: TVShow, id: Int) {
+fun TitleSection(viewModel: MainViewModel, show: TVShow) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,18 +60,16 @@ fun TitleSection(viewModel: MainViewModel, show: TVShow, id: Int) {
         }
 
         Column {
-            if (show.id != -1 && show.id == id) {
-                var imageSource by remember { mutableStateOf(if (show.watchlist) R.drawable.added else R.drawable.add) }
+            var imageSource by remember { mutableStateOf(if (show.watchlist) R.drawable.added else R.drawable.add) }
 
-                IconButton(
-                    onClick = {
-                        show.watchlist = !show.watchlist
-                        imageSource = if (show.watchlist) R.drawable.added else R.drawable.add
-                        viewModel.saveTVShowsToDataStore(show)
-                    }
-                ) {
-                    Image(painter = painterResource(id = imageSource), contentDescription = "Add/Remove to/from Watchlist")
+            IconButton(
+                onClick = {
+                    show.watchlist = !show.watchlist
+                    imageSource = if (show.watchlist) R.drawable.added else R.drawable.add
+                    viewModel.saveTVShowsToDataStore(show)
                 }
+            ) {
+                Image(painter = painterResource(id = imageSource), contentDescription = "Add/Remove to/from Watchlist")
             }
         }
     }

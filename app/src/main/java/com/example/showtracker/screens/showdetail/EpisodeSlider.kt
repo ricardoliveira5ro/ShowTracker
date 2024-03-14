@@ -22,45 +22,42 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun EpisodeSlider(viewModel: MainViewModel, show: TVShow, screenWidth: Dp, idParameter: Int) {
+fun EpisodeSlider(viewModel: MainViewModel, show: TVShow, screenWidth: Dp) {
+    val numberOfPages = show.episodes.size
+    var nextEpisodeIndex by remember { mutableStateOf(show.episodes.indexOfFirst { !it.isWatched }) }
+    val scope = rememberCoroutineScope()
 
-    if (idParameter != -1 && idParameter == show.id) {
-        val numberOfPages = show.episodes.size
-        var nextEpisodeIndex by remember { mutableStateOf(show.episodes.indexOfFirst { !it.isWatched }) }
-        val scope = rememberCoroutineScope()
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 6.dp)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 6.dp)
+    ) {
+        val state = rememberPagerState (
+            initialPage = if (nextEpisodeIndex != -1) nextEpisodeIndex else 0,
+            pageCount = { numberOfPages }
+        )
+        HorizontalPager(
+            state = state,
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = if (state.currentPage == 0) PaddingValues(end = 42.dp) else PaddingValues(horizontal = 32.dp)
         ) {
-            val state = rememberPagerState (
-                initialPage = if (nextEpisodeIndex != -1) nextEpisodeIndex else 0,
-                pageCount = { numberOfPages }
-            )
-            HorizontalPager(
-                state = state,
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = if (state.currentPage == 0) PaddingValues(end = 42.dp) else PaddingValues(horizontal = 32.dp)
-            ) {
-                page ->
-                    EpisodeItem(
-                        viewModel = viewModel,
-                        show = show,
-                        episodeIndex = page,
-                        imageEpisodeUrl = show.poster_path,
-                        width = screenWidth,
-                        isFirstEpisode = state.currentPage == 0,
-                        onNextEpisodeChange = { newIndex ->
-                            if (newIndex != nextEpisodeIndex) {
-                                nextEpisodeIndex = newIndex
-                                scope.launch {
-                                    state.animateScrollToPage(newIndex)
-                                }
+            page ->
+                EpisodeItem(
+                    viewModel = viewModel,
+                    show = show,
+                    episodeIndex = page,
+                    imageEpisodeUrl = show.poster_path,
+                    width = screenWidth,
+                    isFirstEpisode = state.currentPage == 0,
+                    onNextEpisodeChange = { newIndex ->
+                        if (newIndex != nextEpisodeIndex) {
+                            nextEpisodeIndex = newIndex
+                            scope.launch {
+                                state.animateScrollToPage(newIndex)
                             }
                         }
-                    )
-            }
+                    }
+                )
         }
     }
 }

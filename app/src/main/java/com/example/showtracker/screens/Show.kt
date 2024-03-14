@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -20,9 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.example.showtracker.MainViewModel
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.screens.showdetail.BackdropImage
@@ -35,12 +31,9 @@ import com.example.showtracker.ui.theme.ShowTrackerTheme
 import com.example.showtracker.utils.Utils
 
 @Composable
-fun Show(viewModel: MainViewModel, controller: NavController) {
+fun Show(viewModel: MainViewModel, id: Int) {
     val screenHeight = with(LocalDensity.current) { LocalConfiguration.current.screenHeightDp.dp }
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
-
-    val navBackStackEntry by controller.currentBackStackEntryAsState()
-    val id = navBackStackEntry?.arguments?.getString("id")?.toInt()?: -1
 
     val show = viewModel.loadTVShowById(id)
 
@@ -53,7 +46,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
         }
 
         item {
-            TitleSection(viewModel = viewModel, show = show, id = id)
+            TitleSection(viewModel = viewModel, show = show)
         }
 
         item {
@@ -83,7 +76,7 @@ fun Show(viewModel: MainViewModel, controller: NavController) {
 
 
         item {
-            EpisodeSlider(viewModel = viewModel, show = show, screenWidth = screenWidth, idParameter = id)
+            EpisodeSlider(viewModel = viewModel, show = show, screenWidth = screenWidth)
         }
 
 
@@ -120,8 +113,7 @@ fun ShowPreview() {
         ) {
             val viewModel: MainViewModel = viewModel()
             viewModel.setMockTVShow(Utils.mockTVShowPreview)
-            val controller = rememberNavController()
-            Show(viewModel, controller)
+            Show(viewModel, 0)
         }
     }
 }
