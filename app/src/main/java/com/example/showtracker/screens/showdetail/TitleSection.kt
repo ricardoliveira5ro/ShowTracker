@@ -38,7 +38,7 @@ fun TitleSection(viewModel: MainViewModel, show: TVShow) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
-            modifier = Modifier.padding(end = 16.dp)
+            modifier = Modifier.padding(end = 16.dp).weight(1f)
         ) {
             Text(
                 text = show.name,
