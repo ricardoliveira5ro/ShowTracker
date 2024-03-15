@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,7 +47,7 @@ import com.example.showtracker.utils.Utils
 fun Home(viewModel: MainViewModel, controller: NavController) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
-    if (viewModel.isNetworkAvailable()) {
+    if (viewModel.isInternetAvailable(LocalContext.current)) {
         val listState = rememberLazyListState()
 
         var searchInput by remember { mutableStateOf("") }

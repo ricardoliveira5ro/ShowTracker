@@ -1,6 +1,8 @@
 package com.example.showtracker
 
+import android.content.Context
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -15,7 +17,7 @@ import com.example.showtracker.model.TVShowShort
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val dataStoreHelper: DataStoreHelper, private val connectivityManager: ConnectivityManager):ViewModel() {
+class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     private val _currentScreen: MutableState<Screen> = mutableStateOf(Screen.Home)
 
     private val _tvShowListState = MutableLiveData<List<TVShowShort>>()
@@ -206,9 +208,17 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper, private val co
         }
     }
 
-    fun isNetworkAvailable(): Boolean {
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
+    fun isInternetAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCapabilities = connectivityManager.activeNetwork ?: return false
+        val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+        val result = when {
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+        return result
     }
 
     fun setMockTVShowLists(mockTVShows: List<TVShowShort>) {
