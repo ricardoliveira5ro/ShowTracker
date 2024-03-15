@@ -1,7 +1,5 @@
 package com.example.showtracker
 
-import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,10 +19,9 @@ class MainActivity : ComponentActivity() {
         window.navigationBarColor = Color.Transparent.toArgb()
 
         super.onCreate(savedInstanceState)
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         setContent {
             val dataStoreHelper = DataStoreHelper(applicationContext)
-            val viewModel = MainViewModel(dataStoreHelper, connectivityManager)
+            val viewModel = MainViewModel(dataStoreHelper)
             ShowTrackerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(

@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -38,7 +39,7 @@ import com.example.showtracker.utils.Utils
 fun Watchlist(viewModel: MainViewModel, controller: NavController) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
-    if (viewModel.isNetworkAvailable()) {
+    if (viewModel.isInternetAvailable(LocalContext.current)) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

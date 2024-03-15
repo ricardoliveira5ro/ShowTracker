@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,7 +36,7 @@ fun Show(viewModel: MainViewModel, id: Int) {
     val screenHeight = with(LocalDensity.current) { LocalConfiguration.current.screenHeightDp.dp }
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
-    if (viewModel.isNetworkAvailable()) {
+    if (viewModel.isInternetAvailable(LocalContext.current)) {
         val show = viewModel.loadTVShowById(id)
 
         LazyColumn(
