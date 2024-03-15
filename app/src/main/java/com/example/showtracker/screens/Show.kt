@@ -35,71 +35,75 @@ fun Show(viewModel: MainViewModel, id: Int) {
     val screenHeight = with(LocalDensity.current) { LocalConfiguration.current.screenHeightDp.dp }
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
-    val show = viewModel.loadTVShowById(id)
+    if (viewModel.isNetworkAvailable()) {
+        val show = viewModel.loadTVShowById(id)
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize()
-    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
 
-        item {
-            BackdropImage(show = show, screenHeight = screenHeight)
-        }
-
-        item {
-            TitleSection(viewModel = viewModel, show = show)
-        }
-
-        item {
-            Rating_Genres(show = show)
-        }
-
-
-        item {
-            Overview(show = show)
-        }
-
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 6.dp)
-            ) {
-                Text(
-                    text = "Your next episode",
-                    color = Color.White,
-                    fontFamily = Typography.openSans,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
+            item {
+                BackdropImage(show = show, screenHeight = screenHeight)
             }
-        }
 
-
-        item {
-            EpisodeSlider(viewModel = viewModel, show = show, screenWidth = screenWidth)
-        }
-
-
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 16.dp)
-            ) {
-                Text(
-                    text = "Seasons",
-                    color = Color.White,
-                    fontFamily = Typography.openSans,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
+            item {
+                TitleSection(viewModel = viewModel, show = show)
             }
-        }
 
-        items(show.seasons) {
-            season ->
+            item {
+                Rating_Genres(show = show)
+            }
+
+
+            item {
+                Overview(show = show)
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 6.dp)
+                ) {
+                    Text(
+                        text = "Your next episode",
+                        color = Color.White,
+                        fontFamily = Typography.openSans,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+
+
+            item {
+                EpisodeSlider(viewModel = viewModel, show = show, screenWidth = screenWidth)
+            }
+
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 16.dp)
+                ) {
+                    Text(
+                        text = "Seasons",
+                        color = Color.White,
+                        fontFamily = Typography.openSans,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+
+            items(show.seasons) { season ->
                 SeasonsList(show = show, seasonNumber = season.season_number)
+            }
         }
+        
+    } else {
+        NoInternetAvailable(screenWidth = screenWidth)
     }
 }
 

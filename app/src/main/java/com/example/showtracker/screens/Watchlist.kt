@@ -17,6 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,31 +36,47 @@ import com.example.showtracker.utils.Utils
 
 @Composable
 fun Watchlist(viewModel: MainViewModel, controller: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp),
-    )
-    {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(painter = painterResource(id = R.drawable.tv), contentDescription = "TV icon", modifier = Modifier.size(28.dp))
-            Text(
-                text = "Watchlist",
-                color = Color.White,
-                fontFamily = Typography.openSans,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
-            )
-            Icon(painter = painterResource(id = R.drawable.filter), contentDescription = "Filter icon", modifier = Modifier.size(24.dp), tint = colorResource(id = R.color.pink))
+    val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
+
+    if (viewModel.isNetworkAvailable()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+        )
+        {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.tv),
+                    contentDescription = "TV icon",
+                    modifier = Modifier.size(28.dp)
+                )
+                Text(
+                    text = "Watchlist",
+                    color = Color.White,
+                    fontFamily = Typography.openSans,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.filter),
+                    contentDescription = "Filter icon",
+                    modifier = Modifier.size(24.dp),
+                    tint = colorResource(id = R.color.pink)
+                )
+            }
+
+            Spacer(modifier = Modifier.padding(vertical = 12.dp))
+
+            ShowList(showList = viewModel.loadWatchlist(), controller = controller)
         }
 
-        Spacer(modifier = Modifier.padding(vertical = 12.dp))
-
-        ShowList(showList = viewModel.loadWatchlist(), controller = controller)
+    } else {
+        NoInternetAvailable(screenWidth = screenWidth)
     }
 }
 
