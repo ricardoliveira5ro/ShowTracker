@@ -44,88 +44,106 @@ import com.example.showtracker.utils.Utils
 
 @Composable
 fun Home(viewModel: MainViewModel, controller: NavController) {
-    val listState = rememberLazyListState()
-
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
-    var searchInput by remember { mutableStateOf("") }
 
-    val loadedTVShows by viewModel.loadedTVShows.observeAsState(emptyList())
-    val recommendations by viewModel.recommendations.observeAsState(emptyList())
-    val topRated by viewModel.topRated.observeAsState(emptyList())
+    if (viewModel.isNetworkAvailable()) {
+        val listState = rememberLazyListState()
 
-    val showList = remember(loadedTVShows) {
-        loadedTVShows.filter { show ->
-            val hasWatchedEpisode = show.episodes.any { episode -> episode.isWatched }
-            val allEpisodesWatched = show.episodes.all { episode -> episode.isWatched }
-            hasWatchedEpisode && !allEpisodesWatched
-        }
-    }
+        var searchInput by remember { mutableStateOf("") }
 
-    LaunchedEffect(Unit) {
-        viewModel.loadTVShowsFromDataStore()
-    }
+        val loadedTVShows by viewModel.loadedTVShows.observeAsState(emptyList())
+        val recommendations by viewModel.recommendations.observeAsState(emptyList())
+        val topRated by viewModel.topRated.observeAsState(emptyList())
 
-    LaunchedEffect(loadedTVShows) {
-        val id = showList.firstOrNull()?.id ?: -1
-
-        Log.d("MainViewModel", "id -> $id")
-
-        if (id != -1) viewModel.fetchTVShowRecommendationsList(id)
-        else viewModel.fetchTVShowTopRated()
-    }
-
-    val reachedBottom: Boolean by remember { derivedStateOf { listState.reachedBottom() } }
-
-    LaunchedEffect(reachedBottom) {
-        if(reachedBottom) {
-            val id = showList.firstOrNull()?.id ?: -1
-
-            Log.d("MainViewModel", "id bottom -> $id")
-
-            if (id != -1) viewModel.fetchTVShowRecommendationsList(id)
-            else viewModel.fetchTVShowTopRated(false)
-        }
-    }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 12.dp),
-        state = listState
-    ) {
-
-        item {
-            HomeIntroduction()
-        }
-
-        item {
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 8.dp)
-            ) {
-                SearchBar(
-                    onSearchInputChanged = { input -> searchInput = input },
-                    onSearchSubmitted = { controller.navigate(Screen.Search.route + "/$searchInput") },
-                    searchInput
-                )
+        val showList = remember(loadedTVShows) {
+            loadedTVShows.filter { show ->
+                val hasWatchedEpisode = show.episodes.any { episode -> episode.isWatched }
+                val allEpisodesWatched = show.episodes.all { episode -> episode.isWatched }
+                hasWatchedEpisode && !allEpisodesWatched
             }
         }
 
-        item {
-            CurrentlyWatching(controller = controller, showList = showList, screenWidth = screenWidth)
+        LaunchedEffect(Unit) {
+            viewModel.loadTVShowsFromDataStore()
         }
 
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Recommended for you", modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), color = Color.White, fontFamily = Typography.openSans, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        LaunchedEffect(loadedTVShows) {
+            val id = showList.firstOrNull()?.id ?: -1
+
+            Log.d("MainViewModel", "id -> $id")
+
+            if (id != -1) viewModel.fetchTVShowRecommendationsList(id)
+            else viewModel.fetchTVShowTopRated()
         }
 
-        val finalList = if ((showList.firstOrNull()?.id ?: -1) != -1) recommendations else topRated
-        items(finalList.chunked(2)) {items ->
-            Recommended(controller = controller, items = items, screenWidth = screenWidth)
-            Spacer(modifier = Modifier.height(4.dp))
+        val reachedBottom: Boolean by remember { derivedStateOf { listState.reachedBottom() } }
+
+        LaunchedEffect(reachedBottom) {
+            if (reachedBottom) {
+                val id = showList.firstOrNull()?.id ?: -1
+
+                Log.d("MainViewModel", "id bottom -> $id")
+
+                if (id != -1) viewModel.fetchTVShowRecommendationsList(id)
+                else viewModel.fetchTVShowTopRated(false)
+            }
         }
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 12.dp),
+            state = listState
+        ) {
+
+            item {
+                HomeIntroduction()
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 8.dp)
+                ) {
+                    SearchBar(
+                        onSearchInputChanged = { input -> searchInput = input },
+                        onSearchSubmitted = { controller.navigate(Screen.Search.route + "/$searchInput") },
+                        searchInput
+                    )
+                }
+            }
+
+            item {
+                CurrentlyWatching(
+                    controller = controller,
+                    showList = showList,
+                    screenWidth = screenWidth
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Recommended for you",
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    color = Color.White,
+                    fontFamily = Typography.openSans,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+            }
+
+            val finalList =
+                if ((showList.firstOrNull()?.id ?: -1) != -1) recommendations else topRated
+            items(finalList.chunked(2)) { items ->
+                Recommended(controller = controller, items = items, screenWidth = screenWidth)
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+        }
+
+    } else {
+        NoInternetAvailable(screenWidth = screenWidth)
     }
 }
 
