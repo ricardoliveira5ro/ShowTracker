@@ -33,7 +33,6 @@ import com.example.showtracker.MainViewModel
 import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.ui.theme.ShowTrackerTheme
-import com.example.showtracker.utils.Utils
 
 @Composable
 fun Watchlist(viewModel: MainViewModel, controller: NavController) {
@@ -90,7 +89,6 @@ fun WatchlistPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             val viewModel: MainViewModel = viewModel()
-            viewModel.setMockLoadedTVShows(Utils.mockWatchlistPreview)
             val controller = rememberNavController()
 
             Watchlist(viewModel, controller)

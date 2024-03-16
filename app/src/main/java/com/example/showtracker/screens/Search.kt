@@ -25,7 +25,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.showtracker.MainViewModel
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.ui.theme.ShowTrackerTheme
-import com.example.showtracker.utils.Utils
 
 @Composable
 fun Search(viewModel: MainViewModel, controller: NavController, initialSearchInput: String) {
@@ -65,7 +64,6 @@ fun SearchPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             val viewModel: MainViewModel = viewModel()
-            viewModel.setMockTVShowLists(Utils.mockTVShowsListPreview)
             val controller = rememberNavController()
 
             Search(viewModel, controller, "")

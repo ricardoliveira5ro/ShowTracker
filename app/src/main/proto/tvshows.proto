@@ -26,17 +26,19 @@ message ProtoShowItem {
   int32 id = 1;
   string name = 2;
   string overview = 3;
-  string first_air_date = 4;
-  string last_air_date = 5;
-  string poster_path = 6;
-  string backdrop_path = 7;
-  float vote_average = 8;
-  int32 vote_count = 9;
-  bool watchlist = 10;
-  repeated ProtoGenreItem genres = 11;
-  repeated ProtoSeasonItem seasons = 12;
-  repeated ProtoEpisodeItem episodes = 13;
-  string lastEpisodeWatchedDate = 14;
+  int32 number_of_episodes = 4;
+  int32 number_of_seasons = 5;
+  string first_air_date = 6;
+  string last_air_date = 7;
+  string poster_path = 8;
+  string backdrop_path = 9;
+  float vote_average = 10;
+  int32 vote_count = 11;
+  bool watchlist = 12;
+  repeated ProtoGenreItem genres = 13;
+  repeated ProtoSeasonItem seasons = 14;
+  repeated ProtoEpisodeItem episodes = 15;
+  string lastEpisodeWatchedDate = 16;
 }
 
 message ProtoShowItems {

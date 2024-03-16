@@ -41,7 +41,6 @@ import com.example.showtracker.screens.home.CurrentlyWatching
 import com.example.showtracker.screens.home.HomeIntroduction
 import com.example.showtracker.screens.home.Recommended
 import com.example.showtracker.ui.theme.ShowTrackerTheme
-import com.example.showtracker.utils.Utils
 
 @Composable
 fun Home(viewModel: MainViewModel, controller: NavController) {
@@ -162,7 +161,6 @@ fun HomePreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             val viewModel: MainViewModel = viewModel()
-            viewModel.setMockTVShowLists(Utils.mockTVShowsListPreview)
             val controller = rememberNavController()
             Home(viewModel, controller)
         }

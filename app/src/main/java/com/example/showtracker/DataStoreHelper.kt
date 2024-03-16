@@ -34,7 +34,7 @@ class DataStoreHelper(private val context: Context) {
             }
             emit(true)
         }.catch { error ->
-            Log.e("DataStoreHelper", "Error saving show: ${error.message}", error)
+            Log.e("DataStoreHelper", "Error saving list of shows to datastore: ´saveShows´: ${error.message}", error)
             emit(false)
         }
     }
@@ -50,6 +50,8 @@ class DataStoreHelper(private val context: Context) {
             .setId(this.id)
             .setName(this.name)
             .setOverview(this.overview)
+            .setNumberOfEpisodes(this.number_of_episodes)
+            .setNumberOfSeasons(this.number_of_seasons)
             .setFirstAirDate(this.first_air_date)
             .setLastAirDate(this.last_air_date)
             .setPosterPath(this.poster_path)
@@ -69,6 +71,8 @@ class DataStoreHelper(private val context: Context) {
             id = this.id,
             name = this.name,
             overview = this.overview,
+            number_of_episodes = this.numberOfEpisodes,
+            number_of_seasons = this.numberOfSeasons,
             first_air_date = this.firstAirDate,
             last_air_date = this.lastAirDate,
             poster_path = this.posterPath,
@@ -79,8 +83,6 @@ class DataStoreHelper(private val context: Context) {
             episodes = this.episodesList.map { it.toEpisode() },
             seasons = this.seasonsList.map { it.toSeason() },
             genres = this.genresList.map { it.toGenre() },
-            number_of_episodes = 1,
-            number_of_seasons = 1,
             lastEpisodeWatchedDate = if (this.lastEpisodeWatchedDate.isNotEmpty()) dateFormat.parse(this.lastEpisodeWatchedDate) else null
         )
     }

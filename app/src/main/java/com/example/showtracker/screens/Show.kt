@@ -29,7 +29,6 @@ import com.example.showtracker.screens.showdetail.Rating_Genres
 import com.example.showtracker.screens.showdetail.SeasonsList
 import com.example.showtracker.screens.showdetail.TitleSection
 import com.example.showtracker.ui.theme.ShowTrackerTheme
-import com.example.showtracker.utils.Utils
 
 @Composable
 fun Show(viewModel: MainViewModel, id: Int) {
@@ -117,7 +116,6 @@ fun ShowPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             val viewModel: MainViewModel = viewModel()
-            viewModel.setMockTVShow(Utils.mockTVShowPreview)
             Show(viewModel, 0)
         }
     }
