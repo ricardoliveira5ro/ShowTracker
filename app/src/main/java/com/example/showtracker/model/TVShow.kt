@@ -1,5 +1,7 @@
 package com.example.showtracker.model
 
+import java.util.Date
+
 data class TVShow(
     val id: Int,
     val name: String,
@@ -15,7 +17,8 @@ data class TVShow(
     val genres: List<Genre>,
     val seasons: List<Season>,
     val episodes: List<Episode>,
-    var watchlist: Boolean = false
+    var watchlist: Boolean = false,
+    var lastEpisodeWatchedDate: Date?
 )
 
 data class TVShowShort(

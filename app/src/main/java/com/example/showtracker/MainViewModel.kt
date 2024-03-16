@@ -240,7 +240,7 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     )
 
     data class TVShowState(
-        val show: TVShow = TVShow(-1, "", "", -1, -1, "", "", null, null, -1f, -1, emptyList(), emptyList(), emptyList()),
+        val show: TVShow = TVShow(-1, "", "", -1, -1, "", "", null, null, -1f, -1, emptyList(), emptyList(), emptyList(), false, null),
         val error: String? = null
     )
 }

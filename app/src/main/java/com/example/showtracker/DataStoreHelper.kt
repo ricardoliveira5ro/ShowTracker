@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 private val Context.protoDataStore: DataStore<ProtoShowItems> by dataStore(
     fileName = "shows.pb",
@@ -19,6 +21,7 @@ private val Context.protoDataStore: DataStore<ProtoShowItems> by dataStore(
 )
 
 class DataStoreHelper(private val context: Context) {
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
     suspend fun saveShows(shows: List<TVShow>) : Flow<Boolean> {
         return flow {
@@ -57,6 +60,7 @@ class DataStoreHelper(private val context: Context) {
             .addAllGenres(this.genres.map { it.toProtoGenreItem() })
             .addAllSeasons(this.seasons.map { it.toProtoSeasonItem() })
             .addAllEpisodes(this.episodes.map { it.toProtoEpisodeItem() })
+            .setLastEpisodeWatchedDate(this.lastEpisodeWatchedDate?.let { dateFormat.format(it) } ?: "")
             .build()
     }
 
@@ -76,7 +80,8 @@ class DataStoreHelper(private val context: Context) {
             seasons = this.seasonsList.map { it.toSeason() },
             genres = this.genresList.map { it.toGenre() },
             number_of_episodes = 1,
-            number_of_seasons = 1
+            number_of_seasons = 1,
+            lastEpisodeWatchedDate = if (this.lastEpisodeWatchedDate.isNotEmpty()) dateFormat.parse(this.lastEpisodeWatchedDate) else null
         )
     }
 

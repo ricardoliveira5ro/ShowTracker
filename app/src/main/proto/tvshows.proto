@@ -36,6 +36,7 @@ message ProtoShowItem {
   repeated ProtoGenreItem genres = 11;
   repeated ProtoSeasonItem seasons = 12;
   repeated ProtoEpisodeItem episodes = 13;
+  string lastEpisodeWatchedDate = 14;
 }
 
 message ProtoShowItems {
