@@ -36,7 +36,10 @@ fun Show(viewModel: MainViewModel, id: Int) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
     if (viewModel.isInternetAvailable(LocalContext.current)) {
-        val show = viewModel.loadTVShowById(id)
+        var show = viewModel.loadTVShowById(id)
+
+        // Set default show while fetching still loading (avoid previous load)
+        if (show.id != id) show = MainViewModel.TVShowState().show
 
         LazyColumn(
             modifier = Modifier.fillMaxSize()
