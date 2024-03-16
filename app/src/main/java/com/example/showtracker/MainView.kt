@@ -29,7 +29,6 @@ fun MainView(viewModel: MainViewModel) {
         Screen.Show.route -> Screen.Show
         else -> Screen.Home
     }
-    viewModel.setCurrentScreen(currentScreen)
 
     Scaffold(
         bottomBar = {

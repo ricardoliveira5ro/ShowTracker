@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -18,8 +17,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
-    private val _currentScreen: MutableState<Screen> = mutableStateOf(Screen.Home)
-
     private val _tvShowListState = MutableLiveData<List<TVShowShort>>()
     val topRated: LiveData<List<TVShowShort>> = _tvShowListState
     private val _tvShowRecommendationsListState = MutableLiveData<List<TVShowShort>>()
@@ -37,13 +34,6 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
     private var currentTopRatedPage = 1
     private var lastDisplayedShow = -1
 
-    val currentScreen: MutableState<Screen>
-        get() = _currentScreen
-
-    fun setCurrentScreen(screen: Screen) {
-        _currentScreen.value = screen
-    }
-
     fun saveTVShowsToDataStore(tvShow: TVShow) {
         val showsToSave = _loadedTVShows.value.orEmpty().toMutableList()
         val index = showsToSave.indexOfFirst { it.id == tvShow.id }
@@ -53,11 +43,8 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
 
         viewModelScope.launch {
             val success = dataStoreHelper.saveShows(showsToSave.toList()).first()
-            if (success) {
-                Log.d("MainViewModel", "Save shows success")
-            } else {
-                // Error saving show
-            }
+
+            if (!success) Log.e("MainViewModel", "Error trying to save show to data store: ´saveTVShowsToDataStore´")
         }
     }
 
@@ -99,9 +86,8 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
                 lastDisplayedShow = -1
                 if (isFirstLoad) currentTopRatedPage = 1
 
-                Log.d("MainViewModel", "Fetching TV shows...")
                 val response = apiService.getTopRatedTVShows(page = currentTopRatedPage)
-                Log.d("MainViewModel", "Response: $response")
+
                 if (currentTopRatedPage == 1) {
                     _tvShowListState.value = response.results.sortedByDescending { it.vote_count }
 
@@ -112,24 +98,23 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
                     }
                     _tvShowListState.value = currentList
                 }
+
                 currentTopRatedPage++
 
             } catch (e: Exception) {
-                Log.e("MainViewModel", "Error fetching TV shows: ${e.message}", e)
+                Log.e("MainViewModel", "Error fetching Top Rated TV shows: ´fetchTVShowTopRated´: ${e.message}", e)
             }
         }
     }
 
     fun fetchTVShowRecommendationsList(id: Int) {
-        Log.d("MainViewModel", "Id-> $id")
         if (id != -1) {
             viewModelScope.launch {
                 try {
                     if (lastDisplayedShow != id) currentRecommendationPage = 1
 
-                    Log.d("MainViewModel", "Fetching recommendations shows... with id $id")
                     val response = apiService.getRecommendations(id, currentRecommendationPage)
-                    Log.d("MainViewModel", "Response: $response")
+
                     if (currentRecommendationPage == 1) {
                         _tvShowRecommendationsListState.value = response.results
 
@@ -140,11 +125,12 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
                         }
                         _tvShowRecommendationsListState.value = currentList
                     }
+
                     currentRecommendationPage++
                     lastDisplayedShow = id
 
                 } catch (e: Exception) {
-                    Log.e("MainViewModel", "Error fetching TV shows: ${e.message}", e)
+                    Log.e("MainViewModel", "Error fetching Recommendations TV shows: ´fetchTVShowRecommendationsList´: ${e.message}", e)
                 }
             }
         }
@@ -154,13 +140,15 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
         viewModelScope.launch {
             try {
                 val response = apiService.getTVShowsBySearch(query)
+
                 _tvShowSearchState.value = _tvShowSearchState.value.copy(
                     list = response.results.sortedByDescending { it.vote_count },
                     error = null
                 )
 
             } catch (e: Exception) {
-                Log.e("MainViewModel", "Error fetching search TV shows: ${e.message}", e)
+                Log.e("MainViewModel", "Error fetching Search TV shows: ´fetchTVShowSearch´: ${e.message}", e)
+
                 _tvShowSearchState.value = _tvShowSearchState.value.copy(
                     error = "Error fetching TV Shows ${e.message}"
                 )
@@ -196,10 +184,9 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
                         show = show
                     )
 
-                    Log.d("MainViewModel", "Fetch tv show by id success")
-
                 } catch (e: Exception) {
-                    Log.e("MainViewModel", "Error fetching TV Show with id $id: ${e.message}", e)
+                    Log.e("MainViewModel", "Error fetching TV Show with id $id: ´fetchTVShow´: ${e.message}", e)
+
                     _tvShowState.value = _tvShowState.value.copy(
                         error = "Error fetching TV Show with id $id ${e.message}"
                     )
@@ -219,19 +206,6 @@ class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
             else -> false
         }
         return result
-    }
-
-    fun setMockTVShowLists(mockTVShows: List<TVShowShort>) {
-        //_tvShowListState.value = TVShowListState(list = mockTVShows)
-        _tvShowSearchState.value = TVShowListState(list = mockTVShows)
-    }
-
-    fun setMockTVShow(show: TVShow) {
-        _tvShowState.value = TVShowState(show = show)
-    }
-
-    fun setMockLoadedTVShows(mockTVShows: List<TVShow>) {
-        _loadedTVShows.value = mockTVShows
     }
 
     data class TVShowListState(
