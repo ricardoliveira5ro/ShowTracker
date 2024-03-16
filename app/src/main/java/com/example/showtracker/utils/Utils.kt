@@ -49,7 +49,8 @@ object Utils {
             Episode(8, "Episode 1", 3, 1), Episode(9, "Episode 2", 3, 2), Episode(10, "Episode 3", 3, 3),
             Episode(0, "Episode 0", 0, 1),
         ),
-        watchlist = true
+        watchlist = true,
+        lastEpisodeWatchedDate = null
     )
 
     val mockWatchlistPreview = listOf(

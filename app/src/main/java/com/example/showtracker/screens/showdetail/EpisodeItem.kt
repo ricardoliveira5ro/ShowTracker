@@ -35,6 +35,7 @@ import com.example.showtracker.R
 import com.example.showtracker.fonts.Typography
 import com.example.showtracker.model.TVShow
 import com.example.showtracker.utils.Utils
+import java.util.Calendar
 
 @Composable
 fun EpisodeItem(
@@ -103,6 +104,7 @@ fun EpisodeItem(
                         onClick = {
                             episode.isWatched = !episode.isWatched
                             imageSource = if (episode.isWatched) R.drawable.added else R.drawable.add
+                            show.lastEpisodeWatchedDate = Calendar.getInstance().time
                             viewModel.saveTVShowsToDataStore(show)
                             onNextEpisodeChange(show.episodes.indexOfFirst { !it.isWatched })
                         }

@@ -57,7 +57,7 @@ fun Home(viewModel: MainViewModel, controller: NavController) {
         val topRated by viewModel.topRated.observeAsState(emptyList())
 
         val showList = remember(loadedTVShows) {
-            loadedTVShows.filter { show ->
+            loadedTVShows.sortedByDescending { it.lastEpisodeWatchedDate }.filter { show ->
                 val hasWatchedEpisode = show.episodes.any { episode -> episode.isWatched }
                 val allEpisodesWatched = show.episodes.all { episode -> episode.isWatched }
                 hasWatchedEpisode && !allEpisodesWatched
