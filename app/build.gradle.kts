@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.showtracker"
+    namespace = "com.roliveira.showtracker"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.showtracker"
+        applicationId = "com.roliveira.showtracker"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
