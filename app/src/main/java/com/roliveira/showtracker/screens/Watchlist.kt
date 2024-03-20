@@ -36,7 +36,7 @@ import com.roliveira.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
 fun Watchlist(viewModel: MainViewModel, controller: NavController) {
-    val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
+    val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.coerceAtLeast(0.dp) }
 
     if (viewModel.isInternetAvailable(LocalContext.current)) {
         Column(
