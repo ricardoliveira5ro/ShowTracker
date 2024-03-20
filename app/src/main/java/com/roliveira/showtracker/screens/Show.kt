@@ -32,8 +32,8 @@ import com.roliveira.showtracker.ui.theme.ShowTrackerTheme
 
 @Composable
 fun Show(viewModel: MainViewModel, id: Int) {
-    val screenHeight = with(LocalDensity.current) { LocalConfiguration.current.screenHeightDp.dp }
-    val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
+    val screenHeight = with(LocalDensity.current) { LocalConfiguration.current.screenHeightDp.dp.coerceAtLeast(0.dp) }
+    val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.coerceAtLeast(0.dp) }
 
     if (viewModel.isInternetAvailable(LocalContext.current)) {
         var show = viewModel.loadTVShowById(id)

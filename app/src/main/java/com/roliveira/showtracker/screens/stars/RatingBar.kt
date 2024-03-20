@@ -28,7 +28,7 @@ fun FractionalRatingBar(
     filledColor: Color = colorResource(id = R.color.pink),
     emptyColor: Color = Color(0x20FFFFFF)
 ) {
-    val density = LocalDensity.current.density
+    val density = LocalDensity.current.density.coerceAtLeast(0f)
     val starSize = (6f * density).dp
 
     Row(
