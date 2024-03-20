@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option java_package = "com.example.showtracker";
+option java_package = "com.roliveira.showtracker";
 option java_multiple_files = true;
 
 message ProtoGenreItem {
