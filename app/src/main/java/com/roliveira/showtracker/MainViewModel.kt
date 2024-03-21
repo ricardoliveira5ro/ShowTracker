@@ -1,14 +1,15 @@
 package com.roliveira.showtracker
 
+import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roliveira.showtracker.model.Episode
 import com.roliveira.showtracker.model.TVShow
@@ -16,7 +17,9 @@ import com.roliveira.showtracker.model.TVShowShort
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val dataStoreHelper: DataStoreHelper):ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val dataStoreHelper = DataStoreHelper(application)
+
     private val _tvShowListState = MutableLiveData<List<TVShowShort>>()
     val topRated: LiveData<List<TVShowShort>> = _tvShowListState
     private val _tvShowRecommendationsListState = MutableLiveData<List<TVShowShort>>()
