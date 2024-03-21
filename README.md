@@ -8,7 +8,6 @@ The app aims to provide users with a convenient and intuitive way to track their
 `Kotlin` | `JetpackCompose`
 
 ## Get the APP
-[Installer](https://github.com/ricardoliveira5ro/ShowTracker/blob/master/app-release.apk)
-
 > [!NOTE]
+> Download the [Installer](https://github.com/ricardoliveira5ro/ShowTracker/blob/master/app-release.apk) in Android devide and install it
 > Available on Google Play soon!
