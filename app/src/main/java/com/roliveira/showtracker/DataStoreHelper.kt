@@ -1,5 +1,6 @@
 package com.roliveira.showtracker
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.datastore.core.DataStore
@@ -15,17 +16,17 @@ import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-private val Context.protoDataStore: DataStore<ProtoShowItems> by dataStore(
-    fileName = "shows.pb",
-    serializer = TVShowsSerializer
-)
+class DataStoreHelper(private val application: Application) {
+    private val Context.protoDataStore: DataStore<ProtoShowItems> by dataStore(
+        fileName = "shows.pb",
+        serializer = TVShowsSerializer
+    )
 
-class DataStoreHelper(private val context: Context) {
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
     suspend fun saveShows(shows: List<TVShow>) : Flow<Boolean> {
         return flow {
-            context.protoDataStore.updateData { store ->
+            application.protoDataStore.updateData { store ->
                 val storeItem = shows.map { it.toProtoShowItem() }
                 store.toBuilder()
                     .clearShows()
@@ -40,7 +41,7 @@ class DataStoreHelper(private val context: Context) {
     }
 
     fun loadShows(): Flow<List<TVShow>> {
-        return context.protoDataStore.data.map { store ->
+        return application.protoDataStore.data.map { store ->
             store.showsList.map { it.toTVShow() }
         }
     }
